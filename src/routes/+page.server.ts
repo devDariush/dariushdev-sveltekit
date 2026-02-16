@@ -48,7 +48,7 @@ export const load: PageServerLoad = async ({ cookies, platform }) => {
 };
 
 export const actions = {
-	execute: async ({ request, cookies, platform, fetch }) => {
+	execute: async ({ request, cookies, platform, fetch, url }) => {
 		const sessionId = getOrCreateSessionId(cookies);
 		const data = await request.formData();
 		const command = data.get('command')?.toString() || '';
@@ -99,7 +99,7 @@ export const actions = {
 				if (commandConfig?.action === 'clear') {
 					history = []; // Save empty, load function will add greeting
 				} else {
-					const result = await executeCommand(cmd, args, { fetch });
+					const result = await executeCommand(cmd, args, { fetch, url });
 					if (result.output) {
 						history.push({
 							type: result.isGreeting ? 'greeting' : 'output',
@@ -162,7 +162,7 @@ export const actions = {
 		if (commandConfig?.action === 'clear') {
 			history = []; // Save empty, load function will add greeting
 		} else {
-			const result = await executeCommand(cmd, args, { fetch });
+			const result = await executeCommand(cmd, args, { fetch, url });
 			if (result.output) {
 				history.push({
 					type: result.isGreeting ? 'greeting' : 'output',

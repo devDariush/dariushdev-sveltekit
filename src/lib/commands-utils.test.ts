@@ -110,6 +110,18 @@ describe('commands-utils', () => {
 				expect(mockFetch).toHaveBeenCalledWith('/test.txt');
 				expect(result.output).toBe('file content');
 			});
+
+			it('should use full URL when baseUrl is provided', async () => {
+				const mockFetch = vi.fn().mockResolvedValue({
+					ok: true,
+					text: () => Promise.resolve('file content')
+				});
+
+				const baseUrl = new URL('https://example.com');
+				const result = await executeCommand('cat', ['test.txt'], { fetch: mockFetch, url: baseUrl });
+				expect(mockFetch).toHaveBeenCalledWith('https://example.com/test.txt');
+				expect(result.output).toBe('file content');
+			});
 		});
 
 		describe('ls command', () => {
