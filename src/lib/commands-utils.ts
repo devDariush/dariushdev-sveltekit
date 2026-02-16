@@ -1,5 +1,6 @@
 import terminalConfig from '$lib/commands.json';
 import type { TerminalConfig, Link } from '$lib/types/terminal';
+import { staticFiles } from 'virtual:static-files';
 
 const config = terminalConfig as TerminalConfig;
 
@@ -40,36 +41,10 @@ export async function executeCommand(
 				return { output: config.greeting, links: config.greetingLinks, isGreeting: true };
 			}
 			case 'ls': {
-				try {
-					let files: string[];
-
-					if (options?.isServer) {
-						// Server-side: read static directory
-						const fs = await import('fs/promises');
-						const path = await import('path');
-						const staticDir = path.join(process.cwd(), 'static');
-						const entries = await fs.readdir(staticDir, { withFileTypes: true });
-						files = entries
-							.filter((entry) => entry.isFile() && !entry.name.startsWith('.'))
-							.map((entry) => entry.name)
-							.sort();
-					} else {
-						// Client-side: fetch file list from API endpoint
-						const response = await fetch('/api/files');
-						if (!response.ok) {
-							return { output: 'Error listing files' };
-						}
-						files = await response.json();
-					}
-
-					if (files.length === 0) {
-						return { output: 'No files available' };
-					}
-
-					return { output: files.join('\n') };
-				} catch {
-					return { output: 'Error listing files' };
+				if (staticFiles.length === 0) {
+					return { output: 'No files available' };
 				}
+				return { output: staticFiles.join('\n') };
 			}
 			case 'cat': {
 				if (args.length === 0) {
