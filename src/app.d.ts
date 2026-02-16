@@ -9,6 +9,7 @@ declare global {
 		interface Platform {
 			env?: {
 				TERMINAL_KV?: KVNamespace;
+				ASSETS?: Fetcher;
 			};
 			context?: ExecutionContext;
 			caches?: CacheStorage;

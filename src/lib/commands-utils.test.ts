@@ -1,6 +1,15 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { executeCommand } from './commands-utils';
 
+vi.mock('marked', () => ({
+	marked: (content: string) => Promise.resolve(`<h1>${content}</h1>`)
+}));
+
+vi.mock('isomorphic-dompurify', () => ({
+	default: { sanitize: (html: string) => html },
+	sanitize: (html: string) => html
+}));
+
 describe('commands-utils', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
@@ -85,18 +94,52 @@ describe('commands-utils', () => {
 				expect(result.output).toContain('Try: cat about.md');
 			});
 
-			it('should handle file not found on server', async () => {
-				const result = await executeCommand('cat', ['nonexistent.txt'], { isServer: true });
+			it('should handle file not found via fetch', async () => {
+				const mockFetch = vi.fn().mockResolvedValue({ ok: false, status: 404 });
+				const result = await executeCommand('cat', ['nonexistent.txt'], { fetch: mockFetch });
 				expect(result.output).toContain('No such file or directory');
 				expect(result.output).toContain('Use "ls" to see available files');
 			});
 
 			it('should handle 404 on client', async () => {
 				const mockFetch = vi.fn().mockResolvedValue({ ok: false });
-				global.fetch = mockFetch;
-
-				const result = await executeCommand('cat', ['missing.txt'], { isServer: false });
+				const result = await executeCommand('cat', ['missing.txt'], { fetch: mockFetch });
 				expect(result.output).toContain('No such file or directory');
+			});
+
+			it('should read markdown files and return sanitized HTML', async () => {
+				const mockFetch = vi.fn().mockResolvedValue({
+					ok: true,
+					text: () => Promise.resolve('# Hello\n\nWorld')
+				});
+				const result = await executeCommand('cat', ['about.md'], { fetch: mockFetch });
+				expect(result.output).toContain('Hello');
+				expect(result.isHtml).toBe(true);
+			});
+
+			it('should read plain text files without HTML conversion', async () => {
+				const mockFetch = vi.fn().mockResolvedValue({
+					ok: true,
+					text: () => Promise.resolve('plain text content')
+				});
+				const result = await executeCommand('cat', ['file.txt'], { fetch: mockFetch });
+				expect(result.output).toBe('plain text content');
+				expect(result.isHtml).toBeUndefined();
+			});
+
+			it('should handle fetch errors gracefully', async () => {
+				const mockFetch = vi.fn().mockRejectedValue(new Error('Network error'));
+				const result = await executeCommand('cat', ['file.md'], { fetch: mockFetch });
+				expect(result.output).toContain('No such file or directory');
+			});
+
+			it('should call fetch with correct URL path', async () => {
+				const mockFetch = vi.fn().mockResolvedValue({
+					ok: true,
+					text: () => Promise.resolve('content')
+				});
+				await executeCommand('cat', ['social.md'], { fetch: mockFetch });
+				expect(mockFetch).toHaveBeenCalledWith('/social.md');
 			});
 		});
 
