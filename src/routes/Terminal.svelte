@@ -66,7 +66,7 @@
 			return;
 		}
 
-		const result = await executeCommand(cmd, args, { isServer: false });
+		const result = await executeCommand(cmd, args);
 		if (result.output) {
 			history.push({
 				type: result.isGreeting ? 'greeting' : 'output',

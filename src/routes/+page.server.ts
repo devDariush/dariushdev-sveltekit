@@ -107,7 +107,7 @@ export const actions = {
 				if (commandConfig?.action === 'clear') {
 					history = []; // Save empty, load function will add greeting
 				} else {
-					const result = await executeCommand(cmd, args, { isServer: true, fetch: assetFetch });
+					const result = await executeCommand(cmd, args, { fetch: assetFetch });
 					if (result.output) {
 						history.push({
 							type: result.isGreeting ? 'greeting' : 'output',
@@ -171,7 +171,7 @@ export const actions = {
 		if (commandConfig?.action === 'clear') {
 			history = []; // Save empty, load function will add greeting
 		} else {
-			const result = await executeCommand(cmd, args, { isServer: true, fetch: assetFetch });
+			const result = await executeCommand(cmd, args, { fetch: assetFetch });
 			if (result.output) {
 				history.push({
 					type: result.isGreeting ? 'greeting' : 'output',

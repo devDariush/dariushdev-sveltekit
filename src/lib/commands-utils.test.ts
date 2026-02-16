@@ -5,11 +5,6 @@ vi.mock('marked', () => ({
 	marked: (content: string) => Promise.resolve(`<h1>${content}</h1>`)
 }));
 
-vi.mock('isomorphic-dompurify', () => ({
-	default: { sanitize: (html: string) => html },
-	sanitize: (html: string) => html
-}));
-
 describe('commands-utils', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
@@ -171,13 +166,11 @@ describe('commands-utils', () => {
 				expect(files).toEqual(sorted);
 			});
 
-			it('should work without isServer option', async () => {
-				// ls no longer needs isServer - uses build-time file list
+			it('should work without options', async () => {
+				// ls doesn't need fetch - uses build-time file list
 				const result1 = await executeCommand('ls', []);
-				const result2 = await executeCommand('ls', [], { isServer: true });
-				const result3 = await executeCommand('ls', [], { isServer: false });
+				const result2 = await executeCommand('ls', []);
 				expect(result1.output).toBe(result2.output);
-				expect(result2.output).toBe(result3.output);
 			});
 		});
 	});

@@ -11,7 +11,7 @@ const config = terminalConfig as TerminalConfig;
 export async function executeCommand(
 	cmd: string,
 	args: string[],
-	options?: { isServer?: boolean; fetch?: (url: string) => Promise<Response> }
+	options?: { fetch?: (url: string) => Promise<Response> }
 ): Promise<{ output: string; links?: Link[]; isGreeting?: boolean; isHtml?: boolean }> {
 	const command = config.commands[cmd.toLowerCase()];
 
@@ -67,13 +67,11 @@ export async function executeCommand(
 					}
 					const content = await response.text();
 
-					// If it's a markdown file, parse it to HTML and sanitize
+					// If it's a markdown file, parse it to HTML
 					if (filename.endsWith('.md')) {
 						const { marked } = await import('marked');
-						const DOMPurify = await import('isomorphic-dompurify');
-						const rawHtml = await marked(content);
-						const sanitizedHtml = DOMPurify.sanitize(rawHtml);
-						return { output: sanitizedHtml, isHtml: true };
+						const html = await marked(content);
+						return { output: html, isHtml: true };
 					}
 
 					return { output: content };
