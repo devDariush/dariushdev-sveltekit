@@ -97,7 +97,7 @@ describe('commands-utils', () => {
 				const mockFetch = vi.fn().mockRejectedValue(new Error('Network error'));
 
 				const result = await executeCommand('cat', ['error.txt'], { fetch: mockFetch });
-				expect(result.output).toContain('No such file or directory');
+				expect(result.output).toContain('Error - Network error');
 			});
 
 			it('should use provided fetch function', async () => {
@@ -118,9 +118,26 @@ describe('commands-utils', () => {
 				});
 
 				const baseUrl = new URL('https://example.com');
-				const result = await executeCommand('cat', ['test.txt'], { fetch: mockFetch, url: baseUrl });
+				const result = await executeCommand('cat', ['test.txt'], {
+					fetch: mockFetch,
+					url: baseUrl
+				});
 				expect(mockFetch).toHaveBeenCalledWith('https://example.com/test.txt');
 				expect(result.output).toBe('file content');
+			});
+
+			it('should use ASSETS binding when provided (Cloudflare)', async () => {
+				const mockAssetsFetch = vi.fn().mockResolvedValue({
+					ok: true,
+					text: () => Promise.resolve('cloudflare asset content')
+				});
+
+				const mockAssets = { fetch: mockAssetsFetch };
+				const result = await executeCommand('cat', ['test.txt'], { assets: mockAssets as any });
+				expect(mockAssetsFetch).toHaveBeenCalled();
+				const request = mockAssetsFetch.mock.calls[0][0];
+				expect(request.url).toContain('test.txt');
+				expect(result.output).toBe('cloudflare asset content');
 			});
 		});
 

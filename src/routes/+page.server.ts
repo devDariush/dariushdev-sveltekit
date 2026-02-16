@@ -99,7 +99,11 @@ export const actions = {
 				if (commandConfig?.action === 'clear') {
 					history = []; // Save empty, load function will add greeting
 				} else {
-					const result = await executeCommand(cmd, args, { fetch, url });
+					const result = await executeCommand(cmd, args, {
+						fetch,
+						url,
+						assets: platform?.env?.ASSETS
+					});
 					if (result.output) {
 						history.push({
 							type: result.isGreeting ? 'greeting' : 'output',
@@ -162,7 +166,11 @@ export const actions = {
 		if (commandConfig?.action === 'clear') {
 			history = []; // Save empty, load function will add greeting
 		} else {
-			const result = await executeCommand(cmd, args, { fetch, url });
+			const result = await executeCommand(cmd, args, {
+				fetch,
+				url,
+				assets: platform?.env?.ASSETS
+			});
 			if (result.output) {
 				history.push({
 					type: result.isGreeting ? 'greeting' : 'output',

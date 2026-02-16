@@ -4,6 +4,9 @@ import { staticFiles } from 'virtual:static-files';
 
 const config = terminalConfig as TerminalConfig;
 
+// Type for Cloudflare Assets fetcher
+type AssetsFetcher = { fetch: (request: Request) => Promise<Response> };
+
 /**
  * Execute a terminal command and return output
  * Shared logic used by both server and client
@@ -11,10 +14,11 @@ const config = terminalConfig as TerminalConfig;
 export async function executeCommand(
 	cmd: string,
 	args: string[],
-	options?: { fetch?: typeof globalThis.fetch; url?: URL }
+	options?: { fetch?: typeof globalThis.fetch; url?: URL; assets?: AssetsFetcher }
 ): Promise<{ output: string; links?: Link[]; isGreeting?: boolean; isHtml?: boolean }> {
 	const fetchFn = options?.fetch ?? globalThis.fetch;
 	const baseUrl = options?.url;
+	const assetsFetch = options?.assets;
 	const command = config.commands[cmd.toLowerCase()];
 
 	if (!command) {
@@ -58,13 +62,20 @@ export async function executeCommand(
 				const filename = args[0];
 
 				try {
-					// Use fetch for both server and client (works in Cloudflare Workers)
-					// Construct full URL if we have a base URL (server-side)
-					const fileUrl = baseUrl ? new URL(`/${filename}`, baseUrl).href : `/${filename}`;
-					const response = await fetchFn(fileUrl);
+					// Use Cloudflare ASSETS binding if available (server-side), otherwise use fetch
+					let response: Response;
+					if (assetsFetch) {
+						// Cloudflare Workers: use ASSETS.fetch for static files
+						response = await assetsFetch.fetch(new Request(`https://placeholder/${filename}`));
+					} else {
+						// Client-side or local dev: use regular fetch
+						const fileUrl = baseUrl ? new URL(`/${filename}`, baseUrl).href : `/${filename}`;
+						response = await fetchFn(fileUrl);
+					}
+					
 					if (!response.ok) {
 						return {
-							output: `cat: ${filename}: No such file or directory\n\nUse "ls" to see available files`
+							output: `cat: ${filename}: No such file or directory (HTTP ${response.status})\n\nUse "ls" to see available files`
 						};
 					}
 					const content = await response.text();
@@ -77,9 +88,9 @@ export async function executeCommand(
 					}
 
 					return { output: content };
-				} catch {
+				} catch (error) {
 					return {
-						output: `cat: ${filename}: No such file or directory\n\nUse "ls" to see available files`
+						output: `cat: ${filename}: Error - ${error instanceof Error ? error.message : String(error)}\n\nUse "ls" to see available files`
 					};
 				}
 			}

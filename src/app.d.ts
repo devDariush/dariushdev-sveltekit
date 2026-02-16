@@ -9,6 +9,7 @@ declare global {
 		interface Platform {
 			env?: {
 				TERMINAL_KV?: KVNamespace;
+				ASSETS?: { fetch: (request: Request) => Promise<Response> };
 			};
 			context?: ExecutionContext;
 			caches?: CacheStorage;
