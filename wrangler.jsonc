@@ -17,7 +17,17 @@
 	},
 	"observability": {
 		"enabled": true
-	}
+	},
+	"kv_namespaces": [
+		{
+			"binding": "TERMINAL_KV",
+			"id": "f5cba684b6be4f2684cd06b51b83f5f4"
+		},
+		{
+			"binding": "TERMINAL_KV_PREVIEW",
+			"id": "c17d96d9411145a38d2c679f83c3abe7"
+		}
+	]
 	/**
 	 * Smart Placement
 	 * https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
