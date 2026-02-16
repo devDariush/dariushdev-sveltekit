@@ -69,7 +69,7 @@
 		const result = await executeCommand(cmd, args, { isServer: false });
 		if (result.output) {
 			history.push({
-				type: 'output',
+				type: result.isGreeting ? 'greeting' : 'output',
 				content: result.output,
 				links: result.links,
 				isGreeting: result.isGreeting,

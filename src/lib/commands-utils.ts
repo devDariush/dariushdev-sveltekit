@@ -37,30 +37,7 @@ export async function executeCommand(
 			case 'date':
 				return { output: new Date().toLocaleString() };
 			case 'neofetch': {
-				const neofetchOutput = [
-					'',
-					'  \x1b[36mdariush\x1b[0m@\x1b[36mdev\x1b[0m',
-					'  ───────────',
-					'  \x1b[33mName:\x1b[0m      Dariush Komeili',
-					'  \x1b[33mRole:\x1b[0m      CS Student @ HHU',
-					'  \x1b[33mLocation:\x1b[0m  Düsseldorf, Germany 🇩🇪',
-					'  \x1b[33mInterests:\x1b[0m Privacy · Monero · XR · Backend',
-					'  \x1b[33mStack:\x1b[0m     Python · FastAPI · Docker · SvelteKit',
-					'  \x1b[33mBlog:\x1b[0m      blog.dariush.dev',
-					'  \x1b[33mTerminal:\x1b[0m  dariushdev-sveltekit v1.0',
-					''
-				].join('\n');
-				const neofetchLinks: Link[] = [
-					{ text: 'GitHub', type: 'url', target: 'https://github.com/devDariush' },
-					{
-						text: 'LinkedIn',
-						type: 'url',
-						target: 'https://www.linkedin.com/in/dariush-komeili-a44796232'
-					},
-					{ text: 'Bluesky', type: 'url', target: 'https://bsky.app/profile/dariush.dev' },
-					{ text: 'Blog', type: 'url', target: 'https://blog.dariush.dev' }
-				];
-				return { output: neofetchOutput, links: neofetchLinks };
+				return { output: config.greeting, links: config.greetingLinks, isGreeting: true };
 			}
 			case 'ls': {
 				try {

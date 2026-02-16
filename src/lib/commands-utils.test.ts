@@ -57,10 +57,11 @@ describe('commands-utils', () => {
 
 		it('should handle neofetch command', async () => {
 			const result = await executeCommand('neofetch', []);
-			expect(result.output).toContain('dariush');
+			expect(result.output).toContain('Dariush');
 			expect(result.output).toContain('HHU');
 			expect(result.links).toBeDefined();
 			expect(Array.isArray(result.links)).toBe(true);
+			expect(result.isGreeting).toBe(true);
 		});
 
 		it('should handle colors command', async () => {
