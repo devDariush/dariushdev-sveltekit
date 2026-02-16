@@ -1,0 +1,187 @@
+# Test Coverage Summary
+
+## Overview
+
+Comprehensive test suite with **68 tests passing** covering all core terminal functionality.
+
+## Test Files
+
+### 1. ansi-colors.test.ts (12 tests)
+
+Tests ANSI color code parsing and detection:
+
+- ✅ Plain text parsing
+- ✅ Single and multiple color codes
+- ✅ Text before/after color codes
+- ✅ Color without reset
+- ✅ All standard colors (30-37)
+- ✅ Empty string handling
+- ✅ ANSI code detection in text
+
+**Edge cases covered:**
+
+- Empty strings
+- Unknown color codes
+- Text without ANSI codes
+- Escaped brackets
+
+### 2. commands-utils.test.ts (19 tests)
+
+Tests command execution logic for all commands:
+
+- ✅ Unknown command error handling
+- ✅ Built-in commands: ping, help, clear, echo, date, neofetch, links, colors
+- ✅ Case insensitive command handling
+- ✅ Echo with special characters
+- ✅ Cat command (file reading, markdown parsing, error handling)
+- ✅ Ls command (file listing, fetch errors, empty lists)
+
+**Edge cases covered:**
+
+- Empty arguments (echo with no args)
+- Special characters in arguments
+- File not found (cat command)
+- Server vs client execution paths
+- Fetch failures
+- Empty file lists
+
+### 3. session.test.ts (11 tests)
+
+Tests session management and cookie handling:
+
+- ✅ UUID generation format validation
+- ✅ Unique ID generation
+- ✅ ID length verification (36 chars)
+- ✅ Existing session retrieval from cookies
+- ✅ New session creation
+- ✅ Secure cookie settings in production
+- ✅ Cookie expiration (1 year)
+- ✅ HttpOnly flag
+- ✅ SameSite=lax setting
+- ✅ Cookie path (/)
+- ✅ Empty string handling
+
+**Edge cases covered:**
+
+- Missing cookie
+- Empty cookie value
+- Production vs development environments
+
+### 4. terminal.test.ts (15 tests)
+
+Tests TypeScript type definitions:
+
+- ✅ Link types (command and URL)
+- ✅ CommandConfig with various options
+- ✅ TerminalConfig structure
+- ✅ HistoryEntry types (command, output, greeting)
+- ✅ Optional fields (links, isGreeting, isHtml)
+
+**Edge cases covered:**
+
+- Static vs dynamic commands
+- Commands with actions
+- Commands with links
+- Multiple commands
+- All optional fields present
+
+### 5. server.test.ts (10 tests)
+
+Tests API endpoint for file listing:
+
+- ✅ File listing with sorting
+- ✅ Hidden file filtering (.gitignore, etc.)
+- ✅ Directory filtering
+- ✅ Alphabetical sorting
+- ✅ Empty directory handling
+- ✅ Filesystem error handling
+- ✅ Mixed file types
+- ✅ Files with special characters
+
+**Edge cases covered:**
+
+- Empty directories
+- Only directories (no files)
+- Permission errors
+- ENOENT errors
+- Files with spaces, dashes, underscores
+
+### 6. demo.spec.ts (1 test)
+
+Example test demonstrating test infrastructure.
+
+## Coverage Analysis
+
+### Core Functionality ✅
+
+- Command parsing and execution
+- ANSI color support
+- File system operations (cat, ls)
+- Session management
+- Cookie persistence
+- Error handling
+
+### Edge Cases ✅
+
+- Empty inputs
+- Missing files
+- Invalid commands
+- Filesystem errors
+- Network failures
+- Special characters
+- Case sensitivity
+- Empty arrays/strings
+
+### Security ✅
+
+- Cookie security (httpOnly, secure, sameSite)
+- Session ID format (UUID v4)
+- File access restrictions (no hidden files)
+- HTML sanitization (covered by DOMPurify in production)
+
+## Running Tests
+
+```bash
+# Run all tests
+npm run test:unit
+
+# Run tests in watch mode
+npm run test:unit -- --watch
+
+# Run with verbose output
+npm run test:unit -- --run --reporter=verbose
+
+# Run specific test file
+npm run test:unit -- src/lib/ansi-colors.test.ts
+```
+
+## Test Configuration
+
+Tests are configured in [vite.config.ts](vite.config.ts) with two projects:
+
+1. **Client tests** (`*.svelte.test.ts`): Browser-based tests using Playwright
+2. **Server tests** (`*.test.ts`): Node environment tests
+
+## Future Test Enhancements
+
+### Potential Additions:
+
+- [ ] Integration tests for Terminal.svelte component
+- [ ] E2E tests for full user workflows
+- [ ] Performance tests for large file handling
+- [ ] Stress tests for command history limits
+- [ ] Browser compatibility tests
+- [ ] Accessibility tests
+
+### Missing Coverage:
+
+- Terminal.svelte component (requires browser testing setup)
+- +page.server.ts actions (requires SvelteKit testing utils)
+- Complete markdown rendering pipeline
+- KV storage integration
+
+## Notes
+
+- Playwright browser is not installed in dev environment (client tests will fail until `npx playwright install` is run)
+- Mocks are used for filesystem operations to avoid test environment dependencies
+- Tests are environment-aware (server vs client paths)

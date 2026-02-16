@@ -1,0 +1,63 @@
+{
+	"greeting": "\n     _           _           _     \n  __| | __ _ _ __(_)_   _ ___| |__  \n / _` |/ _` | '__| | | | / __| '_ \\ \n| (_| | (_| | |  | | |_| \\__ \\ | | |\n \\__,_|\\__,_|_|  |_|\\__,_|___/_| |_|\n\n  Dariush Komeili\n  CS Student @ HHU · Düsseldorf 🇩🇪\n\n  Type 'help' for commands",
+	"greetingLinks": [
+		{
+			"text": "about",
+			"type": "command",
+			"target": "cat about.md"
+		},
+		{
+			"text": "social",
+			"type": "command",
+			"target": "cat social.md"
+		},
+		{
+			"text": "contact",
+			"type": "command",
+			"target": "cat contact.md"
+		},
+		{
+			"text": "blog",
+			"type": "url",
+			"target": "https://blog.dariush.dev"
+		}
+	],
+	"commands": {
+		"help": {
+			"description": "Show available commands",
+			"response": "dynamic"
+		},
+		"clear": {
+			"description": "Clear the terminal",
+			"action": "clear"
+		},
+		"neofetch": {
+			"description": "Display system information",
+			"response": "dynamic"
+		},
+		"cat": {
+			"description": "Display contents of a file",
+			"response": "dynamic"
+		},
+		"ls": {
+			"description": "List available files",
+			"response": "dynamic"
+		},
+		"echo": {
+			"description": "Echo back the input",
+			"response": "dynamic"
+		},
+		"date": {
+			"description": "Show current date and time",
+			"response": "dynamic"
+		},
+		"ping": {
+			"description": "Test connectivity",
+			"response": "pong"
+		},
+		"colors": {
+			"description": "Demo ANSI color codes",
+			"response": "\u001b[31mRed text\u001b[0m\n\u001b[32mGreen text\u001b[0m\n\u001b[33mYellow text\u001b[0m\n\u001b[34mBlue text\u001b[0m\n\u001b[35mMagenta text\u001b[0m\n\u001b[36mCyan text\u001b[0m\n\u001b[91mBright red\u001b[0m\n\u001b[92mBright green\u001b[0m\n\u001b[93mBright yellow\u001b[0m"
+		}
+	}
+}
