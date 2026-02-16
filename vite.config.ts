@@ -2,9 +2,44 @@ import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vitest/config';
 import { playwright } from '@vitest/browser-playwright';
 import { sveltekit } from '@sveltejs/kit/vite';
+import { readdirSync } from 'fs';
+import { join } from 'path';
+import type { Plugin } from 'vite';
+
+/**
+ * Vite plugin that reads the static/ directory at build time and provides
+ * a virtual module with the file list. This avoids runtime filesystem access
+ * which is not available on Cloudflare Workers.
+ */
+function staticFilesPlugin(): Plugin {
+	const virtualModuleId = 'virtual:static-files';
+	const resolvedVirtualModuleId = '\0' + virtualModuleId;
+
+	return {
+		name: 'static-files',
+		resolveId(id) {
+			if (id === virtualModuleId) return resolvedVirtualModuleId;
+		},
+		load(id) {
+			if (id === resolvedVirtualModuleId) {
+				const staticDir = join(process.cwd(), 'static');
+				try {
+					const entries = readdirSync(staticDir, { withFileTypes: true });
+					const files = entries
+						.filter((entry) => entry.isFile() && !entry.name.startsWith('.'))
+						.map((entry) => entry.name)
+						.sort();
+					return `export const staticFiles = ${JSON.stringify(files)};`;
+				} catch {
+					return `export const staticFiles = [];`;
+				}
+			}
+		}
+	};
+}
 
 export default defineConfig({
-	plugins: [tailwindcss(), sveltekit()],
+	plugins: [tailwindcss(), staticFilesPlugin(), sveltekit()],
 	test: {
 		expect: { requireAssertions: true },
 		projects: [

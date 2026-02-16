@@ -101,41 +101,40 @@ describe('commands-utils', () => {
 		});
 
 		describe('ls command', () => {
-			it('should list files on server', async () => {
-				const result = await executeCommand('ls', [], { isServer: true });
-				// In test environment, will actually read the static directory
-				expect(result.output).toContain('about.md'); // At least one file should exist
+			it('should list files from build-time static file list', async () => {
+				const result = await executeCommand('ls', []);
+				expect(result.output).toContain('about.md');
 			});
 
-			it('should handle fetch error on client', async () => {
-				const mockFetch = vi.fn().mockResolvedValue({ ok: false });
-				global.fetch = mockFetch;
-
-				const result = await executeCommand('ls', [], { isServer: false });
-				expect(result.output).toBe('Error listing files');
+			it('should list multiple known static files', async () => {
+				const result = await executeCommand('ls', []);
+				expect(result.output).toContain('contact.md');
+				expect(result.output).toContain('social.md');
+				expect(result.output).toContain('docs.md');
 			});
 
-			it('should handle empty file list on client', async () => {
-				const mockFetch = vi.fn().mockResolvedValue({
-					ok: true,
-					json: () => Promise.resolve([])
-				});
-				global.fetch = mockFetch;
-
-				const result = await executeCommand('ls', [], { isServer: false });
-				expect(result.output).toBe('No files available');
+			it('should not include hidden files', async () => {
+				const result = await executeCommand('ls', []);
+				const files = result.output.split('\n');
+				for (const file of files) {
+					expect(file.startsWith('.')).toBe(false);
+				}
 			});
 
-			it('should fetch file list on client', async () => {
-				const mockFetch = vi.fn().mockResolvedValue({
-					ok: true,
-					json: () => Promise.resolve(['file1.txt', 'file2.md'])
-				});
-				global.fetch = mockFetch;
+			it('should return files sorted alphabetically', async () => {
+				const result = await executeCommand('ls', []);
+				const files = result.output.split('\n');
+				const sorted = [...files].sort();
+				expect(files).toEqual(sorted);
+			});
 
-				const result = await executeCommand('ls', [], { isServer: false });
-				expect(result.output).toBe('file1.txt\nfile2.md');
-				expect(mockFetch).toHaveBeenCalledWith('/api/files');
+			it('should work without isServer option', async () => {
+				// ls no longer needs isServer - uses build-time file list
+				const result1 = await executeCommand('ls', []);
+				const result2 = await executeCommand('ls', [], { isServer: true });
+				const result3 = await executeCommand('ls', [], { isServer: false });
+				expect(result1.output).toBe(result2.output);
+				expect(result2.output).toBe(result3.output);
 			});
 		});
 	});
