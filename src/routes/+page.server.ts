@@ -109,7 +109,8 @@ export const actions = {
 							type: result.isGreeting ? 'greeting' : 'output',
 							content: result.output,
 							links: result.links,
-							isGreeting: result.isGreeting
+							isGreeting: result.isGreeting,
+							isHtml: result.isHtml
 						});
 					}
 				}

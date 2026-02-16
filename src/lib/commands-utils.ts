@@ -72,7 +72,7 @@ export async function executeCommand(
 						const fileUrl = baseUrl ? new URL(`/${filename}`, baseUrl).href : `/${filename}`;
 						response = await fetchFn(fileUrl);
 					}
-					
+
 					if (!response.ok) {
 						return {
 							output: `cat: ${filename}: No such file or directory (HTTP ${response.status})\n\nUse "ls" to see available files`
