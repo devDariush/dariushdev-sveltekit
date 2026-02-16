@@ -87,19 +87,28 @@ describe('commands-utils', () => {
 
 			it('should handle file not found', async () => {
 				const mockFetch = vi.fn().mockResolvedValue({ ok: false });
-				global.fetch = mockFetch;
 
-				const result = await executeCommand('cat', ['nonexistent.txt']);
+				const result = await executeCommand('cat', ['nonexistent.txt'], { fetch: mockFetch });
 				expect(result.output).toContain('No such file or directory');
 				expect(result.output).toContain('Use "ls" to see available files');
 			});
 
 			it('should handle fetch errors', async () => {
 				const mockFetch = vi.fn().mockRejectedValue(new Error('Network error'));
-				global.fetch = mockFetch;
 
-				const result = await executeCommand('cat', ['error.txt']);
+				const result = await executeCommand('cat', ['error.txt'], { fetch: mockFetch });
 				expect(result.output).toContain('No such file or directory');
+			});
+
+			it('should use provided fetch function', async () => {
+				const mockFetch = vi.fn().mockResolvedValue({
+					ok: true,
+					text: () => Promise.resolve('file content')
+				});
+
+				const result = await executeCommand('cat', ['test.txt'], { fetch: mockFetch });
+				expect(mockFetch).toHaveBeenCalledWith('/test.txt');
+				expect(result.output).toBe('file content');
 			});
 		});
 
@@ -131,13 +140,11 @@ describe('commands-utils', () => {
 				expect(files).toEqual(sorted);
 			});
 
-			it('should work without isServer option', async () => {
-				// ls no longer needs isServer - uses build-time file list
+			it('should work without options', async () => {
+				// ls doesn't need fetch - uses build-time file list
 				const result1 = await executeCommand('ls', []);
-				const result2 = await executeCommand('ls', [], { isServer: true });
-				const result3 = await executeCommand('ls', [], { isServer: false });
+				const result2 = await executeCommand('ls', []);
 				expect(result1.output).toBe(result2.output);
-				expect(result2.output).toBe(result3.output);
 			});
 		});
 	});

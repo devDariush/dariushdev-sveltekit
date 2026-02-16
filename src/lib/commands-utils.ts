@@ -10,8 +10,10 @@ const config = terminalConfig as TerminalConfig;
  */
 export async function executeCommand(
 	cmd: string,
-	args: string[]
+	args: string[],
+	options?: { fetch?: typeof globalThis.fetch }
 ): Promise<{ output: string; links?: Link[]; isGreeting?: boolean; isHtml?: boolean }> {
+	const fetchFn = options?.fetch ?? globalThis.fetch;
 	const command = config.commands[cmd.toLowerCase()];
 
 	if (!command) {
@@ -56,7 +58,7 @@ export async function executeCommand(
 
 				try {
 					// Use fetch for both server and client (works in Cloudflare Workers)
-					const response = await fetch(`/${filename}`);
+					const response = await fetchFn(`/${filename}`);
 					if (!response.ok) {
 						return {
 							output: `cat: ${filename}: No such file or directory\n\nUse "ls" to see available files`
