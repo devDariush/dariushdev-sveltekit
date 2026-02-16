@@ -85,17 +85,20 @@ describe('commands-utils', () => {
 				expect(result.output).toContain('Try: cat about.md');
 			});
 
-			it('should handle file not found on server', async () => {
-				const result = await executeCommand('cat', ['nonexistent.txt'], { isServer: true });
+			it('should handle file not found', async () => {
+				const mockFetch = vi.fn().mockResolvedValue({ ok: false });
+				global.fetch = mockFetch;
+
+				const result = await executeCommand('cat', ['nonexistent.txt']);
 				expect(result.output).toContain('No such file or directory');
 				expect(result.output).toContain('Use "ls" to see available files');
 			});
 
-			it('should handle 404 on client', async () => {
-				const mockFetch = vi.fn().mockResolvedValue({ ok: false });
+			it('should handle fetch errors', async () => {
+				const mockFetch = vi.fn().mockRejectedValue(new Error('Network error'));
 				global.fetch = mockFetch;
 
-				const result = await executeCommand('cat', ['missing.txt'], { isServer: false });
+				const result = await executeCommand('cat', ['error.txt']);
 				expect(result.output).toContain('No such file or directory');
 			});
 		});

@@ -10,8 +10,7 @@ const config = terminalConfig as TerminalConfig;
  */
 export async function executeCommand(
 	cmd: string,
-	args: string[],
-	options?: { isServer?: boolean }
+	args: string[]
 ): Promise<{ output: string; links?: Link[]; isGreeting?: boolean; isHtml?: boolean }> {
 	const command = config.commands[cmd.toLowerCase()];
 
@@ -56,24 +55,14 @@ export async function executeCommand(
 				const filename = args[0];
 
 				try {
-					let content: string;
-
-					if (options?.isServer) {
-						// Server-side: read from static folder using fs
-						const fs = await import('fs/promises');
-						const path = await import('path');
-						const filePath = path.join(process.cwd(), 'static', filename);
-						content = await fs.readFile(filePath, 'utf-8');
-					} else {
-						// Client-side: fetch from static folder
-						const response = await fetch(`/${filename}`);
-						if (!response.ok) {
-							return {
-								output: `cat: ${filename}: No such file or directory\n\nUse "ls" to see available files`
-							};
-						}
-						content = await response.text();
+					// Use fetch for both server and client (works in Cloudflare Workers)
+					const response = await fetch(`/${filename}`);
+					if (!response.ok) {
+						return {
+							output: `cat: ${filename}: No such file or directory\n\nUse "ls" to see available files`
+						};
 					}
+					const content = await response.text();
 
 					// If it's a markdown file, parse it to HTML and sanitize
 					if (filename.endsWith('.md')) {
