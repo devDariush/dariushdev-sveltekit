@@ -114,8 +114,10 @@ This will:
 - **Session-based storage**: Uses session cookies to track users
 - **KV for history**: Terminal history stored in Cloudflare KV (unlimited size)
 - **Cookie for theme**: Dark mode preference stored in cookie (small size)
-- **Automatic fallback**: Uses cookies in local dev, KV in production
-- **Error handling**: If cookies exceed 4KB limit, automatically reduces history
+- **Automatic fallback**: Uses cookies in local dev (20 entries max), KV in production (100 entries max)
+- **Error handling**: Cookie storage includes automatic size fallback when exceeding 4KB limit
+
+> **Deep Dive**: See [ARCHITECTURE.md](ARCHITECTURE.md#storage-architecture) for complete technical details on storage mechanisms, KV configuration, and cookie fallback logic.
 
 ## Environment Variables
 

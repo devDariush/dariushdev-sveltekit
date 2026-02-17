@@ -157,10 +157,32 @@ npm run test:unit -- src/lib/ansi-colors.test.ts
 
 ## Test Configuration
 
-Tests are configured in [vite.config.ts](vite.config.ts) with two projects:
+Tests are configured in [vite.config.ts](../vite.config.ts) with two projects:
 
 1. **Client tests** (`*.svelte.test.ts`): Browser-based tests using Playwright
-2. **Server tests** (`*.test.ts`): Node environment tests
+2. **Server tests** (`*.test.ts`): **Edge runtime environment** tests
+
+### Edge Runtime Testing
+
+Server tests use `environment: 'edge-runtime'` to simulate Cloudflare Workers:
+
+```typescript
+{
+  name: 'server',
+  environment: 'edge-runtime',  // Simulates Cloudflare Workers
+  include: ['src/**/*.{test,spec}.{js,ts}'],
+  exclude: ['src/**/*.svelte.{test,spec}.{js,ts}']
+}
+```
+
+**Why Edge Runtime?**
+
+- Tests run in an environment that closely mimics Cloudflare Workers
+- Catches issues where Node.js-specific APIs are used (which won't work on Workers)
+- Ensures code works in actual deployment environment
+- Validates that no filesystem access or other unsupported APIs are used
+
+See [ARCHITECTURE.md](ARCHITECTURE.md#testing-edge-runtime) for more details.
 
 ## Future Test Enhancements
 

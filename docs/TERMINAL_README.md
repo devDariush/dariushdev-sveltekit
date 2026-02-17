@@ -71,10 +71,12 @@ The terminal works perfectly **without JavaScript**:
 - Auto-focus on input
 - Custom blinking cursor with accurate positioning
 - Smooth transitions
-- **Real-time persistence**: History saved to KV after every command
+- **Real-time persistence**: History saved via `persist` action after every command
 - Enhanced link interactions (preventDefault on forms)
 - Client-side markdown rendering
 - Instant theme switching
+
+> **Technical Detail**: The JS-enhanced terminal uses a dedicated `persist` action to save history asynchronously without blocking user interaction. See [ARCHITECTURE.md](ARCHITECTURE.md#persist-action-async-history-saving) for implementation details.
 
 ## Adding New Commands
 
@@ -146,6 +148,8 @@ export async function executeCommand(
 - `ls` - List all files in the static directory
 - `cat <filename>` - Display file contents (supports .md rendering)
 
+> **Note**: File listing uses a custom Vite plugin that reads the `/static` directory at build time, enabling the `ls` command to work on Cloudflare Workers where runtime filesystem access is unavailable. See [ARCHITECTURE.md](ARCHITECTURE.md#virtual-static-files-plugin) for implementation details.
+
 ### Demo Commands
 
 - `colors` - Show all available ANSI color codes
@@ -195,6 +199,17 @@ The terminal supports markdown file rendering:
 **Security**: Markdown is rendered using the `marked` library which has built-in XSS protection.
 
 ## Persistence
+
+### Storage Architecture
+
+The terminal uses a dual storage strategy:
+
+- **Production (Cloudflare)**: KV storage with 100-entry limit, 7-day TTL
+- **Local Development**: Cookie storage with 20-entry limit (4KB browser limit)
+
+Cookie storage includes **automatic fallback logic**: if the history exceeds the 4KB cookie limit, it automatically reduces to the last 20 entries.
+
+> **Deep Dive**: See [ARCHITECTURE.md](ARCHITECTURE.md#storage-architecture) for complete details on storage mechanisms, fallback logic, and session management.
 
 ### Without JavaScript
 

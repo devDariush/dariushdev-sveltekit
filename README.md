@@ -35,6 +35,7 @@ npm run build
 ## 📖 Documentation
 
 - [Terminal Usage Guide](docs/TERMINAL_README.md) - Commands, customization, and features
+- [Architecture Deep Dive](docs/ARCHITECTURE.md) - Technical implementation details
 - [Cloudflare Deployment](docs/CLOUDFLARE_DEPLOYMENT.md) - Production deployment guide
 - [Color Codes Reference](docs/COLOR_CODES.md) - ANSI color code documentation
 - [Test Coverage](docs/TEST_COVERAGE.md) - Testing strategy and coverage details

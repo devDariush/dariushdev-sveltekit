@@ -30,6 +30,18 @@ Complete documentation for the Terminal Interface project.
 - Development workflows
 - Customization options
 
+### [ARCHITECTURE.md](ARCHITECTURE.md)
+
+**Deep technical architecture documentation**
+
+- Virtual static files plugin (Vite plugin for Cloudflare Workers)
+- Storage architecture (KV vs cookies, size limits, fallback logic)
+- Persist action (async history saving in JS mode)
+- API endpoints (/api/files, form actions)
+- Progressive enhancement implementation details
+- Edge runtime testing strategy
+- Key architectural decisions and rationale
+
 ### [CLOUDFLARE_DEPLOYMENT.md](CLOUDFLARE_DEPLOYMENT.md)
 
 **Production deployment to Cloudflare Pages**
@@ -103,6 +115,9 @@ Complete documentation for the Terminal Interface project.
 - `src/lib/server/session.ts` - Session management
 - `src/routes/+page.server.ts` - Server actions (execute, persist)
 - `src/routes/Terminal.svelte` - Client terminal component
+- `src/routes/api/files/+server.ts` - File listing API endpoint
+- `src/virtual-static-files.d.ts` - Virtual module type declarations
+- `vite.config.ts` - Virtual static files plugin
 
 ## 🔍 Quick Reference
 
@@ -128,7 +143,7 @@ npm run build        # Build for production
 - ✅ Real-time persistence with Cloudflare KV
 - ✅ Markdown rendering with XSS protection
 - ✅ ANSI color support (16 colors)
-- ✅ 68 comprehensive tests
+- ✅ 71 comprehensive tests
 - ✅ TypeScript strict mode
 - ✅ Accessible (WCAG compliant)
 
@@ -138,6 +153,7 @@ npm run build        # Build for production
 | ------------------------ | ----------- | ------------ | ------------ |
 | README.md                | ✅ Complete | Current      | 100%         |
 | TERMINAL_README.md       | ✅ Complete | Current      | 100%         |
+| ARCHITECTURE.md          | ✅ Complete | Current      | 100%         |
 | CLOUDFLARE_DEPLOYMENT.md | ✅ Complete | Current      | 100%         |
 | COLOR_CODES.md           | ✅ Complete | Current      | 100%         |
 | TEST_COVERAGE.md         | ✅ Complete | Current      | 100%         |
@@ -148,18 +164,23 @@ npm run build        # Build for production
 
 ### ✅ Fully Documented
 
-- Progressive enhancement strategy
-- Command system and execution
-- ANSI color parsing
-- Markdown rendering
-- Session management
-- KV storage integration
-- Cookie-based fallback
-- Testing approach
-- Deployment process
-- File system operations
-- Security measures (sanitization, cookies)
-- Accessibility features
+- Progressive enhancement strategy (dual-mode implementation)
+- Command system and execution (shared logic)
+- ANSI color parsing (16 colors with dark/light mode)
+- Markdown rendering (XSS protection via marked)
+- Session management (UUID-based with secure cookies)
+- KV storage integration (Cloudflare Workers)
+- Cookie-based fallback (automatic size reduction)
+- **Virtual static files plugin** (Vite plugin for Cloudflare compatibility)
+- **Edge runtime testing** (Cloudflare Workers simulation)
+- **Persist action** (async history saving in JS mode)
+- **API endpoints** (/api/files, form actions)
+- **Storage architecture** (KV vs cookies, size limits, fallback logic)
+- Testing approach (71 tests, Vitest + Playwright)
+- Deployment process (Cloudflare Pages + KV setup)
+- File system operations (build-time file listing)
+- Security measures (sanitization, httpOnly cookies, CSRF protection)
+- Accessibility features (WCAG compliant, keyboard navigation)
 
 ### 📋 Implementation Details
 
