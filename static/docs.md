@@ -26,7 +26,6 @@
 
 ### Demo Commands
 
-- `links` - Demo of clickable links (commands and URLs)
 - `colors` - Demo ANSI color codes
 
 ## File System
@@ -56,12 +55,14 @@ Run the test suite:
 npm run test:unit
 ```
 
-**71 tests** covering:
+Comprehensive test coverage including:
 - Command execution
 - ANSI color parsing
 - Session management
 - File operations
 - API endpoints
+
+See `TEST_COVERAGE.md` for detailed information.
 
 ---
 

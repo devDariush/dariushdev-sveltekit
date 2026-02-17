@@ -111,16 +111,20 @@ Edit `src/lib/commands.json`:
 }
 ```
 
-For dynamic commands, add the logic in `Terminal.svelte`:
+For dynamic commands, add the logic in `src/lib/commands-utils.ts`:
 
 ```typescript
-function executeCommand(cmd: string, args: string[]): string {
+export async function executeCommand(
+	cmd: string,
+	args: string[],
+	options?: { fetch?: (url: string) => Promise<Response> }
+): Promise<{ output: string; links?: Link[]; isGreeting?: boolean; isHtml?: boolean }> {
 	const command = config.commands[cmd.toLowerCase()];
 
 	if (command.response === 'dynamic') {
 		switch (cmd.toLowerCase()) {
 			case 'yourcommand':
-				return `Dynamic response: ${args.join(' ')}`;
+				return { output: `Dynamic response: ${args.join(' ')}` };
 		}
 	}
 }
@@ -144,7 +148,6 @@ function executeCommand(cmd: string, args: string[]): string {
 
 ### Demo Commands
 
-- `links` - Demonstrate clickable command and URL links
 - `colors` - Show all available ANSI color codes
 
 ## Link Types
@@ -186,10 +189,10 @@ The terminal supports markdown file rendering:
 
 1. Place `.md` files in the `static/` directory
 2. Use `cat filename.md` to render them
-3. Markdown is parsed with `marked` and sanitized with `DOMPurify`
+3. Markdown is parsed with `marked` library
 4. Custom CSS styles applied for headings, lists, code blocks, etc.
 
-**Security**: All HTML output is sanitized to prevent XSS attacks.
+**Security**: Markdown is rendered using the `marked` library which has built-in XSS protection.
 
 ## Persistence
 
@@ -208,6 +211,6 @@ The terminal supports markdown file rendering:
 
 ### Local Development
 
-- Use `npm run dev:cf` to test with local KV storage
-- Fallback to cookies when KV is unavailable
+- Use `npm run dev` for development (uses cookie fallback)
+- Use `npm run preview` to test with Wrangler and local KV
 - Wrangler provides local KV in `.wrangler/state`

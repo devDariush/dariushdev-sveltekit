@@ -12,7 +12,7 @@ A fully-featured terminal interface built with **SvelteKit 5**, featuring progre
 - 🚀 **Progressive Enhancement** - Full functionality without JavaScript
 - ☁️ **Cloudflare KV Storage** - Unlimited command history with session management
 - ⚡ **Real-time Persistence** - History saved after every command (JS mode)
-- 🧪 **71 Tests** - Comprehensive test coverage with Vitest
+- 🧪 **Comprehensive Tests** - Full test coverage with Vitest
 - 🎯 **TypeScript** - Full type safety throughout
 - ♿ **Accessible** - WCAG compliant with keyboard navigation
 
@@ -78,7 +78,7 @@ npm run test:e2e
 npm test
 ```
 
-**Test Coverage**: 71 tests covering commands, ANSI parsing, session management, file operations, and API endpoints.
+**Test Coverage**: Comprehensive test suite covering commands, ANSI parsing, session management, file operations, and API endpoints. See [TEST_COVERAGE.md](TEST_COVERAGE.md) for details.
 
 ## 📦 Deployment
 
@@ -87,18 +87,15 @@ npm test
 See [CLOUDFLARE_DEPLOYMENT.md](CLOUDFLARE_DEPLOYMENT.md) for complete deployment instructions.
 
 ```sh
-# Build for Cloudflare
-npm run build
-
-# Deploy
-wrangler pages deploy .svelte-kit/cloudflare
+# Build and deploy
+npm run deploy
 ```
 
-### Local Development with KV
+### Test Production Build Locally
 
 ```sh
-# Run with local KV storage
-npm run dev:cf
+# Build and run with Wrangler (local KV)
+npm run preview
 ```
 
 ## 🛠️ Tech Stack
@@ -106,7 +103,7 @@ npm run dev:cf
 - **Framework**: SvelteKit 5 with Runes
 - **Styling**: Tailwind CSS v4
 - **Storage**: Cloudflare KV
-- **Markdown**: marked + DOMPurify
+- **Markdown**: marked
 - **Testing**: Vitest + Playwright
 - **Deployment**: Cloudflare Pages
 - **Language**: TypeScript (strict mode)

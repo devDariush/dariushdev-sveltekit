@@ -16,11 +16,11 @@ This is a **Terminal Interface** built with SvelteKit 5, featuring progressive e
 
 ### Always Maintain Tests
 
-**CRITICAL**: When modifying any code, you MUST update or create corresponding tests.
+**CRITICAL**: When modifying any code, you MUST update or create corresponding tests, especially for hot paths.
 
 #### Test Coverage Standards
 
-- **Target**: Maintain 68+ tests with 100% pass rate
+- **Target**: Maintain ≥80% test coverage with 100% pass rate
 - **Minimum**: Every function must have at least one test
 - **Edge Cases**: Test empty inputs, errors, boundaries, and invalid data
 - **Both Modes**: Test server-side and client-side execution paths
@@ -97,7 +97,7 @@ describe('module name', () => {
 2. If tests need updates, the refactor may be breaking
 3. Add regression tests for bugs being fixed
 
-### Test Categories
+### Test Categories (examples)
 
 #### Unit Tests (`*.test.ts`)
 
@@ -283,11 +283,8 @@ When creating endpoints:
 ### Always Sanitize
 
 ```typescript
-// Use DOMPurify for HTML
-import DOMPurify from 'isomorphic-dompurify';
-const clean = DOMPurify.sanitize(dirtyHtml);
-
-// Never trust user input
+// Markdown is handled by marked library with built-in XSS protection
+// For user input paths:
 const safePath = path.join(SAFE_DIR, sanitize(userInput));
 ```
 
@@ -381,8 +378,8 @@ test: {
 
 Current status (maintain or improve):
 
-- ✅ **71 tests** passing
-- ✅ **5 test files** covering all core modules
+- ✅ **All tests** passing (run `npm run test:unit` to verify)
+- ✅ **Comprehensive coverage** across all core modules
 - ✅ **0 failing** tests
 - ✅ **100%** critical path coverage
 

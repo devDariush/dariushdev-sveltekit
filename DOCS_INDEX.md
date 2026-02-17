@@ -55,7 +55,7 @@ Complete documentation for the Terminal Interface project.
 
 **Testing strategy and coverage details**
 
-- Test suite overview (71 tests)
+- Test suite overview
 - Test file breakdown
 - Edge cases covered
 - Running tests
@@ -90,7 +90,7 @@ Complete documentation for the Terminal Interface project.
 - `tsconfig.json` - TypeScript configuration
 - `vite.config.ts` - Vite and Vitest config
 - `svelte.config.js` - SvelteKit + Cloudflare adapter
-- `wrangler.toml` - Cloudflare KV bindings
+- `wrangler.jsonc` - Cloudflare KV bindings
 - `playwright.config.ts` - E2E test configuration
 - `eslint.config.js` - Linting rules
 
@@ -111,7 +111,7 @@ Complete documentation for the Terminal Interface project.
 ```bash
 npm install          # Install dependencies
 npm run dev          # Start development
-npm run dev:cf       # Dev with local KV
+npm run preview      # Test production build with local KV
 npm run test:unit    # Run tests
 npm run build        # Build for production
 ```
@@ -120,13 +120,13 @@ npm run build        # Build for production
 
 - **Basic**: `help`, `clear`, `ping`, `echo`, `date`, `neofetch`
 - **Files**: `ls`, `cat <file>`
-- **Demo**: `links`, `colors`
+- **Demo**: `colors`
 
 ### Key Features
 
 - ✅ Works without JavaScript (SSR + forms)
 - ✅ Real-time persistence with Cloudflare KV
-- ✅ Markdown rendering with DOMPurify sanitization
+- ✅ Markdown rendering with XSS protection
 - ✅ ANSI color support (16 colors)
 - ✅ 68 comprehensive tests
 - ✅ TypeScript strict mode
