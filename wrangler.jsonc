@@ -22,8 +22,7 @@
 	"kv_namespaces": [
 		{
 			"binding": "TERMINAL_KV",
-			"id": "f5cba684b6be4f2684cd06b51b83f5f4", // namespace "TERMINAL_KV"
-			"preview_id": "c17d96d9411145a38d2c679f83c3abe7"
+			"id": "c17d96d9411145a38d2c679f83c3abe7", // namespace "TERMINAL_KV_PREVIEW"
 		}
 	],
 	// Production Override (main branch)
@@ -32,7 +31,7 @@
 			"kv_namespaces": [
 				{
 					"binding": "TERMINAL_KV",
-					"id": "c17d96d9411145a38d2c679f83c3abe7", // namespace "TERMINAL_KV_PREVIEW"
+					"id": "f5cba684b6be4f2684cd06b51b83f5f4", // namespace "TERMINAL_KV"
 				}
 			],
 		}
