@@ -48,7 +48,6 @@
 		"wrangler": "^4.65.0"
 	},
 	"dependencies": {
-		"isomorphic-dompurify": "^3.0.0-rc.2",
 		"marked": "^17.0.2"
 	}
 }

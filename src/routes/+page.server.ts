@@ -48,8 +48,16 @@ export const load: PageServerLoad = async ({ cookies, platform }) => {
 };
 
 export const actions = {
-	execute: async ({ request, cookies, platform }) => {
+	execute: async ({ request, cookies, platform, fetch: eventFetch }) => {
 		const sessionId = getOrCreateSessionId(cookies);
+
+		// Create a fetch function for reading static assets
+		// On Cloudflare: use ASSETS binding (works in Workers/NoJS)
+		// Locally: use SvelteKit's event.fetch
+		const assets = platform?.env?.ASSETS;
+		const assetFetch = assets
+			? (url: string) => assets.fetch(new URL(url, request.url))
+			: (url: string) => eventFetch(url);
 		const data = await request.formData();
 		const command = data.get('command')?.toString() || '';
 		const action = data.get('action')?.toString();
@@ -99,13 +107,14 @@ export const actions = {
 				if (commandConfig?.action === 'clear') {
 					history = []; // Save empty, load function will add greeting
 				} else {
-					const result = await executeCommand(cmd, args);
+					const result = await executeCommand(cmd, args, { fetch: assetFetch });
 					if (result.output) {
 						history.push({
 							type: result.isGreeting ? 'greeting' : 'output',
 							content: result.output,
 							links: result.links,
-							isGreeting: result.isGreeting
+							isGreeting: result.isGreeting,
+							isHtml: result.isHtml
 						});
 					}
 				}
@@ -162,7 +171,7 @@ export const actions = {
 		if (commandConfig?.action === 'clear') {
 			history = []; // Save empty, load function will add greeting
 		} else {
-			const result = await executeCommand(cmd, args, { isServer: true });
+			const result = await executeCommand(cmd, args, { fetch: assetFetch });
 			if (result.output) {
 				history.push({
 					type: result.isGreeting ? 'greeting' : 'output',
