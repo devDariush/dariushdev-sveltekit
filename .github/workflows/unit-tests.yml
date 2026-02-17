@@ -36,5 +36,5 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Run unit tests
+      - name: Run unit tests (V8 edge-runtime, no Node APIs)
         run: npm run test:unit -- --run
