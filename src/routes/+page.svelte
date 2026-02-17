@@ -38,11 +38,11 @@
 			}
 		}
 
-		setTimeout(() => inputElement?.focus(), 0);
+		setTimeout(() => inputElement?.focus({ preventScroll: true }), 0);
 	}
 
 	function focusInput() {
-		inputElement?.focus();
+		inputElement?.focus({ preventScroll: true });
 	}
 
 	function handleFormSubmit() {
@@ -50,7 +50,7 @@
 			if (terminalBodyRef) {
 				terminalBodyRef.scrollTop = terminalBodyRef.scrollHeight;
 			}
-			inputElement?.focus();
+			inputElement?.focus({ preventScroll: true });
 		}, 100);
 	}
 
