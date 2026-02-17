@@ -31,7 +31,7 @@
 
 	function handleBlur(e: FocusEvent) {
 		const target = e.target as HTMLInputElement;
-		target?.focus();
+		target?.focus({ preventScroll: true });
 	}
 
 	function updateCursorPosition() {

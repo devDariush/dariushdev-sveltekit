@@ -113,7 +113,7 @@
 		} else if (link.type === 'url') {
 			window.open(link.target, '_blank', 'noopener,noreferrer');
 		}
-		setTimeout(() => inputElement?.focus(), 0);
+		setTimeout(() => inputElement?.focus({ preventScroll: true }), 0);
 	}
 
 	function handleInput(value: string) {
@@ -125,7 +125,7 @@
 	}
 
 	function focusInput() {
-		inputElement?.focus();
+		inputElement?.focus({ preventScroll: true });
 	}
 </script>
 
