@@ -17,7 +17,7 @@
 	</div>
 
 	<div class="flex-1 text-center text-sm font-medium text-gray-600 dark:text-gray-400">
-		terminal
+		dariush.dev
 	</div>
 
 	<button
