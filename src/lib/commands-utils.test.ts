@@ -102,7 +102,7 @@ describe('commands-utils', () => {
 				expect(result.output).toContain('No such file or directory');
 			});
 
-			it('should read markdown files and return sanitized HTML', async () => {
+			it('should read markdown files and return HTML', async () => {
 				const mockFetch = vi.fn().mockResolvedValue({
 					ok: true,
 					text: () => Promise.resolve('# Hello\n\nWorld')
