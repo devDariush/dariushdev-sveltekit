@@ -7,3 +7,6 @@ bun.lockb
 
 # Miscellaneous
 /static/
+
+# Prettier PostCSS parser issue with Svelte double curly braces
+src/routes/+page.svelte
