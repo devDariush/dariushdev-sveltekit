@@ -26,7 +26,6 @@
 
 ### Demo Commands
 
-- `links` - Demo of clickable links (commands and URLs)
 - `colors` - Demo ANSI color codes
 
 ## File System
@@ -41,7 +40,7 @@ Files are served from the `/static` folder.
 
 ## Color Codes
 
-See `COLOR_CODES.md` in the project root for full ANSI color reference.
+See `docs/COLOR_CODES.md` in the project for full ANSI color reference.
 
 ## Keyboard Shortcuts
 
@@ -56,12 +55,14 @@ Run the test suite:
 npm run test:unit
 ```
 
-**71 tests** covering:
+Comprehensive test coverage including:
 - Command execution
 - ANSI color parsing
 - Session management
 - File operations
 - API endpoints
+
+See `docs/TEST_COVERAGE.md` for detailed information.
 
 ---
 

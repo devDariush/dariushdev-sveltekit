@@ -71,10 +71,12 @@ The terminal works perfectly **without JavaScript**:
 - Auto-focus on input
 - Custom blinking cursor with accurate positioning
 - Smooth transitions
-- **Real-time persistence**: History saved to KV after every command
+- **Real-time persistence**: History saved via `persist` action after every command
 - Enhanced link interactions (preventDefault on forms)
 - Client-side markdown rendering
 - Instant theme switching
+
+> **Technical Detail**: The JS-enhanced terminal uses a dedicated `persist` action to save history asynchronously without blocking user interaction. See [ARCHITECTURE.md](ARCHITECTURE.md#persist-action-async-history-saving) for implementation details.
 
 ## Adding New Commands
 
@@ -111,16 +113,20 @@ Edit `src/lib/commands.json`:
 }
 ```
 
-For dynamic commands, add the logic in `Terminal.svelte`:
+For dynamic commands, add the logic in `src/lib/commands-utils.ts`:
 
 ```typescript
-function executeCommand(cmd: string, args: string[]): string {
+export async function executeCommand(
+	cmd: string,
+	args: string[],
+	options?: { fetch?: (url: string) => Promise<Response> }
+): Promise<{ output: string; links?: Link[]; isGreeting?: boolean; isHtml?: boolean }> {
 	const command = config.commands[cmd.toLowerCase()];
 
 	if (command.response === 'dynamic') {
 		switch (cmd.toLowerCase()) {
 			case 'yourcommand':
-				return `Dynamic response: ${args.join(' ')}`;
+				return { output: `Dynamic response: ${args.join(' ')}` };
 		}
 	}
 }
@@ -142,9 +148,10 @@ function executeCommand(cmd: string, args: string[]): string {
 - `ls` - List all files in the static directory
 - `cat <filename>` - Display file contents (supports .md rendering)
 
+> **Note**: File listing uses a custom Vite plugin that reads the `/static` directory at build time, enabling the `ls` command to work on Cloudflare Workers where runtime filesystem access is unavailable. See [ARCHITECTURE.md](ARCHITECTURE.md#virtual-static-files-plugin) for implementation details.
+
 ### Demo Commands
 
-- `links` - Demonstrate clickable command and URL links
 - `colors` - Show all available ANSI color codes
 
 ## Link Types
@@ -186,12 +193,23 @@ The terminal supports markdown file rendering:
 
 1. Place `.md` files in the `static/` directory
 2. Use `cat filename.md` to render them
-3. Markdown is parsed with `marked` and sanitized with `DOMPurify`
+3. Markdown is parsed with `marked` library
 4. Custom CSS styles applied for headings, lists, code blocks, etc.
 
-**Security**: All HTML output is sanitized to prevent XSS attacks.
+**Security**: Markdown is rendered using the `marked` library which has built-in XSS protection.
 
 ## Persistence
+
+### Storage Architecture
+
+The terminal uses a dual storage strategy:
+
+- **Production (Cloudflare)**: KV storage with 100-entry limit, 7-day TTL
+- **Local Development**: Cookie storage with 20-entry limit (4KB browser limit)
+
+Cookie storage includes **automatic fallback logic**: if the history exceeds the 4KB cookie limit, it automatically reduces to the last 20 entries.
+
+> **Deep Dive**: See [ARCHITECTURE.md](ARCHITECTURE.md#storage-architecture) for complete details on storage mechanisms, fallback logic, and session management.
 
 ### Without JavaScript
 
@@ -208,6 +226,6 @@ The terminal supports markdown file rendering:
 
 ### Local Development
 
-- Use `npm run dev:cf` to test with local KV storage
-- Fallback to cookies when KV is unavailable
+- Use `npm run dev` for development (uses cookie fallback)
+- Use `npm run preview` to test with Wrangler and local KV
 - Wrangler provides local KV in `.wrangler/state`

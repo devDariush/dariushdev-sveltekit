@@ -30,21 +30,22 @@ This will output something like:
 { binding = "TERMINAL_KV", preview_id = "xyz789..." }
 ```
 
-### 3. Update wrangler.toml
+### 3. Update wrangler.jsonc
 
-Replace the KV namespace configuration in `wrangler.toml` with your actual IDs:
+Replace the KV namespace configuration in `wrangler.jsonc` with your actual IDs:
 
-```toml
-name = "dariushdev-terminal"
-compatibility_date = "2024-01-01"
-
-# Pages configuration
-pages_build_output_dir = ".svelte-kit/cloudflare"
-
-[[kv_namespaces]]
-binding = "TERMINAL_KV"
-id = "abc123..."           # Your production KV namespace ID
-preview_id = "xyz789..."   # Your preview KV namespace ID
+```jsonc
+{
+	"name": "dariushdev-sveltekit",
+	"compatibility_date": "2026-02-12",
+	"kv_namespaces": [
+		{
+			"binding": "TERMINAL_KV",
+			"id": "abc123...", // Your production KV namespace ID
+			"preview_id": "xyz789..." // Your preview KV namespace ID
+		}
+	]
+}
 ```
 
 ### 4. Build the Project
@@ -61,7 +62,7 @@ npm run build
 npm run deploy
 ```
 
-This builds the project and deploys using `wrangler pages deploy`.
+This builds the project and deploys using `wrangler deploy`.
 
 #### Option B: Automatic Git Deployment (Recommended)
 
@@ -85,49 +86,38 @@ Connect your GitHub repository to Cloudflare Pages for automatic deployments:
 
 ## Local Development
 
-### Testing with Local KV
-
-Wrangler provides local KV storage for development:
-
-```bash
-# Option 1: Run dev server with local KV (recommended)
-npm run dev:cf
-```
-
-This will:
-
-- Start the Vite dev server
-- Provide a local KV namespace (stored in `.wrangler/state`)
-- Hot reload on file changes
-- Test the full KV functionality locally
-
-### Testing with Cookie Fallback
-
-For quick development without KV:
+### Quick Development (Cookie Fallback)
 
 ```bash
 npm run dev
 ```
 
-The app automatically falls back to cookie-based storage with reduced history (20 entries) to avoid size limits.
+The app automatically falls back to cookie-based storage with reduced history (20 entries) to avoid size limits. This is the fastest way to develop and test changes.
 
-### Testing Production Build Locally
+### Testing Production Build with Local KV
 
-To test the full production build with KV:
+To test the full production build with Wrangler's local KV:
 
 ```bash
-npm run preview:cf
+npm run preview
 ```
 
-This builds the app and runs it with Wrangler's local KV.
+This will:
+
+- Build the app for production
+- Start Wrangler dev server
+- Provide a local KV namespace (stored in `.wrangler/state`)
+- Test the full KV functionality locally
 
 ## Architecture
 
 - **Session-based storage**: Uses session cookies to track users
 - **KV for history**: Terminal history stored in Cloudflare KV (unlimited size)
 - **Cookie for theme**: Dark mode preference stored in cookie (small size)
-- **Automatic fallback**: Uses cookies in local dev, KV in production
-- **Error handling**: If cookies exceed 4KB limit, automatically reduces history
+- **Automatic fallback**: Uses cookies in local dev (20 entries max), KV in production (100 entries max)
+- **Error handling**: Cookie storage includes automatic size fallback when exceeding 4KB limit
+
+> **Deep Dive**: See [ARCHITECTURE.md](ARCHITECTURE.md#storage-architecture) for complete technical details on storage mechanisms, KV configuration, and cookie fallback logic.
 
 ## Environment Variables
 

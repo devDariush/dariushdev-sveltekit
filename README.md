@@ -12,7 +12,7 @@ A fully-featured terminal interface built with **SvelteKit 5**, featuring progre
 - 🚀 **Progressive Enhancement** - Full functionality without JavaScript
 - ☁️ **Cloudflare KV Storage** - Unlimited command history with session management
 - ⚡ **Real-time Persistence** - History saved after every command (JS mode)
-- 🧪 **71 Tests** - Comprehensive test coverage with Vitest
+- 🧪 **Comprehensive Tests** - Full test coverage with Vitest
 - 🎯 **TypeScript** - Full type safety throughout
 - ♿ **Accessible** - WCAG compliant with keyboard navigation
 
@@ -34,10 +34,11 @@ npm run build
 
 ## 📖 Documentation
 
-- [Terminal Usage Guide](TERMINAL_README.md) - Commands, customization, and features
-- [Cloudflare Deployment](CLOUDFLARE_DEPLOYMENT.md) - Production deployment guide
-- [Color Codes Reference](COLOR_CODES.md) - ANSI color code documentation
-- [Test Coverage](TEST_COVERAGE.md) - Testing strategy and coverage details
+- [Terminal Usage Guide](docs/TERMINAL_README.md) - Commands, customization, and features
+- [Architecture Deep Dive](docs/ARCHITECTURE.md) - Technical implementation details
+- [Cloudflare Deployment](docs/CLOUDFLARE_DEPLOYMENT.md) - Production deployment guide
+- [Color Codes Reference](docs/COLOR_CODES.md) - ANSI color code documentation
+- [Test Coverage](docs/TEST_COVERAGE.md) - Testing strategy and coverage details
 
 ## 🏗️ Architecture
 
@@ -78,27 +79,24 @@ npm run test:e2e
 npm test
 ```
 
-**Test Coverage**: 71 tests covering commands, ANSI parsing, session management, file operations, and API endpoints.
+**Test Coverage**: Comprehensive test suite covering commands, ANSI parsing, session management, file operations, and API endpoints. See [docs/TEST_COVERAGE.md](docs/TEST_COVERAGE.md) for details.
 
 ## 📦 Deployment
 
 ### Cloudflare Pages
 
-See [CLOUDFLARE_DEPLOYMENT.md](CLOUDFLARE_DEPLOYMENT.md) for complete deployment instructions.
+See [docs/CLOUDFLARE_DEPLOYMENT.md](docs/CLOUDFLARE_DEPLOYMENT.md) for complete deployment instructions.
 
 ```sh
-# Build for Cloudflare
-npm run build
-
-# Deploy
-wrangler pages deploy .svelte-kit/cloudflare
+# Build and deploy
+npm run deploy
 ```
 
-### Local Development with KV
+### Test Production Build Locally
 
 ```sh
-# Run with local KV storage
-npm run dev:cf
+# Build and run with Wrangler (local KV)
+npm run preview
 ```
 
 ## 🛠️ Tech Stack
@@ -106,7 +104,7 @@ npm run dev:cf
 - **Framework**: SvelteKit 5 with Runes
 - **Styling**: Tailwind CSS v4
 - **Storage**: Cloudflare KV
-- **Markdown**: marked + DOMPurify
+- **Markdown**: marked
 - **Testing**: Vitest + Playwright
 - **Deployment**: Cloudflare Pages
 - **Language**: TypeScript (strict mode)

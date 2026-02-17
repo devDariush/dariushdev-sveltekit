@@ -7,20 +7,21 @@ This is a **Terminal Interface** built with SvelteKit 5, featuring progressive e
 ## Core Principles
 
 1. **Test-Driven Development**: All features must have corresponding tests
-2. **Type Safety**: Use TypeScript strict mode throughout
-3. **Progressive Enhancement**: Code must work with and without JavaScript
-4. **Security First**: Sanitize all user inputs and HTML output
-5. **Accessibility**: WCAG compliant, keyboard navigable
+2. **Documentation Maintenance**: Update docs when changing features, commands, or architecture
+3. **Type Safety**: Use TypeScript strict mode throughout
+4. **Progressive Enhancement**: Code must work with and without JavaScript
+5. **Security First**: Sanitize all user inputs and HTML output
+6. **Accessibility**: WCAG compliant, keyboard navigable
 
 ## Testing Requirements
 
 ### Always Maintain Tests
 
-**CRITICAL**: When modifying any code, you MUST update or create corresponding tests.
+**CRITICAL**: When modifying any code, you MUST update or create corresponding tests, especially for hot paths.
 
 #### Test Coverage Standards
 
-- **Target**: Maintain 68+ tests with 100% pass rate
+- **Target**: Maintain ≥80% test coverage with 100% pass rate
 - **Minimum**: Every function must have at least one test
 - **Edge Cases**: Test empty inputs, errors, boundaries, and invalid data
 - **Both Modes**: Test server-side and client-side execution paths
@@ -97,7 +98,7 @@ describe('module name', () => {
 2. If tests need updates, the refactor may be breaking
 3. Add regression tests for bugs being fixed
 
-### Test Categories
+### Test Categories (examples)
 
 #### Unit Tests (`*.test.ts`)
 
@@ -283,11 +284,8 @@ When creating endpoints:
 ### Always Sanitize
 
 ```typescript
-// Use DOMPurify for HTML
-import DOMPurify from 'isomorphic-dompurify';
-const clean = DOMPurify.sanitize(dirtyHtml);
-
-// Never trust user input
+// Markdown is handled by marked library with built-in XSS protection
+// For user input paths:
 const safePath = path.join(SAFE_DIR, sanitize(userInput));
 ```
 
@@ -302,15 +300,60 @@ cookies.set('name', value, {
 });
 ```
 
-## Documentation
+## Documentation Requirements
 
-When adding features, update:
+### Always Maintain Documentation
 
-1. **README.md** - If it's a major feature
-2. **TERMINAL_README.md** - If it adds commands or changes behavior
-3. **TEST_COVERAGE.md** - When adding new test files
-4. **static/docs.md** - If users need to know about it
-5. **Code Comments** - For complex logic
+**CRITICAL**: When modifying any feature, command, or architecture, you MUST update the corresponding documentation.
+
+#### Which Documents to Update
+
+When making changes, update the relevant documentation:
+
+1. **README.md** - Major features, quick start changes, tech stack updates
+2. **docs/TERMINAL_README.md** - New commands, command behavior changes, usage patterns
+3. **docs/ARCHITECTURE.md** - Technical implementation changes, new endpoints, storage logic, plugins
+4. **docs/CLOUDFLARE_DEPLOYMENT.md** - Deployment process changes, KV configuration, environment setup
+5. **docs/COLOR_CODES.md** - ANSI color support changes
+6. **docs/TEST_COVERAGE.md** - New test files, testing strategy changes
+7. **docs/DOCS_INDEX.md** - When adding new documentation or updating coverage
+8. **static/docs.md** - User-facing command changes, in-terminal help updates
+9. **Code Comments** - Complex logic, non-obvious implementations
+
+#### Documentation Standards
+
+- **Accuracy**: Documentation must reflect actual implementation
+- **Completeness**: Cover all user-facing changes and architectural decisions
+- **Examples**: Provide code examples where relevant
+- **Cross-references**: Link related documentation sections
+- **Test Counts**: Update test counts in DOCS_INDEX.md when adding/removing tests
+
+#### When to Update Documentation
+
+**Adding New Features**:
+
+1. Document the feature before or immediately after implementation
+2. Add usage examples
+3. Update command lists and feature lists
+4. Add to DOCS_INDEX.md coverage section
+
+**Modifying Existing Features**:
+
+1. Update all affected documentation files
+2. Ensure examples still work
+3. Update any changed behavior or API
+
+**Changing Architecture**:
+
+1. Update ARCHITECTURE.md with implementation details
+2. Explain the rationale for changes
+3. Document new patterns or approaches
+
+**Adding/Removing Tests**:
+
+1. Update TEST_COVERAGE.md with new test files
+2. Update test count in DOCS_INDEX.md (currently 71 tests)
+3. Document new testing patterns if introduced
 
 ## Common Pitfalls to Avoid
 
@@ -331,6 +374,12 @@ When adding features, update:
 
 ❌ **Don't**: Skip edge cases "because they're unlikely"  
 ✅ **Do**: Edge cases are where bugs hide
+
+❌ **Don't**: Change features without updating documentation  
+✅ **Do**: Update relevant docs immediately when making changes
+
+❌ **Don't**: Leave outdated examples or instructions in docs  
+✅ **Do**: Verify documentation accuracy after changes
 
 ## Test Execution
 
@@ -381,13 +430,16 @@ test: {
 
 Current status (maintain or improve):
 
-- ✅ **71 tests** passing
-- ✅ **5 test files** covering all core modules
+- ✅ **All tests** passing (run `npm run test:unit` to verify)
+- ✅ **Comprehensive coverage** across all core modules
 - ✅ **0 failing** tests
 - ✅ **100%** critical path coverage
 
 ## Summary
 
-**Golden Rule**: If you write code, write tests. If you modify code, update tests. If tests fail, fix the issue—don't delete the test.
+**Golden Rules**:
 
-The test suite is the project's safety net. Treat it as production code.
+1. **Tests**: If you write code, write tests. If you modify code, update tests. If tests fail, fix the issue—don't delete the test.
+2. **Documentation**: If you change a feature, command, or architecture, update the documentation. Keep docs in sync with code.
+
+The test suite and documentation are the project's safety net. Treat them as production code.

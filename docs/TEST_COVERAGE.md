@@ -2,11 +2,11 @@
 
 ## Overview
 
-Comprehensive test suite with **71 tests passing** covering all core terminal functionality.
+Comprehensive test suite covering all core terminal functionality. Run `npm run test:unit` to see current test count and status.
 
 ## Test Files
 
-### 1. ansi-colors.test.ts (12 tests)
+### 1. ansi-colors.test.ts
 
 Tests ANSI color code parsing and detection:
 
@@ -25,12 +25,12 @@ Tests ANSI color code parsing and detection:
 - Text without ANSI codes
 - Escaped brackets
 
-### 2. commands-utils.test.ts (23 tests)
+### 2. commands-utils.test.ts
 
 Tests command execution logic for all commands:
 
 - ✅ Unknown command error handling
-- ✅ Built-in commands: ping, help, clear, echo, date, neofetch, links, colors
+- ✅ Built-in commands: ping, help, clear, echo, date, neofetch, colors
 - ✅ Case insensitive command handling
 - ✅ Echo with special characters
 - ✅ Cat command (file reading, markdown parsing, error handling)
@@ -45,7 +45,7 @@ Tests command execution logic for all commands:
 - Fetch failures
 - Empty file lists
 
-### 3. session.test.ts (11 tests)
+### 3. session.test.ts
 
 Tests session management and cookie handling:
 
@@ -67,7 +67,7 @@ Tests session management and cookie handling:
 - Empty cookie value
 - Production vs development environments
 
-### 4. terminal.test.ts (15 tests)
+### 4. terminal.test.ts
 
 Tests TypeScript type definitions:
 
@@ -85,7 +85,7 @@ Tests TypeScript type definitions:
 - Multiple commands
 - All optional fields present
 
-### 5. server.test.ts (10 tests)
+### 5. server.test.ts
 
 Tests API endpoint for file listing:
 
@@ -106,9 +106,9 @@ Tests API endpoint for file listing:
 - ENOENT errors
 - Files with spaces, dashes, underscores
 
-### 6. demo.spec.ts (1 test)
+### 6. terminal.test.ts (E2E)
 
-Example test demonstrating test infrastructure.
+End-to-end tests for full terminal workflows using Playwright.
 
 ## Coverage Analysis
 
@@ -137,7 +137,7 @@ Example test demonstrating test infrastructure.
 - Cookie security (httpOnly, secure, sameSite)
 - Session ID format (UUID v4)
 - File access restrictions (no hidden files)
-- HTML sanitization (covered by DOMPurify in production)
+- Markdown XSS protection (built into marked library)
 
 ## Running Tests
 
@@ -157,10 +157,32 @@ npm run test:unit -- src/lib/ansi-colors.test.ts
 
 ## Test Configuration
 
-Tests are configured in [vite.config.ts](vite.config.ts) with two projects:
+Tests are configured in [vite.config.ts](../vite.config.ts) with two projects:
 
 1. **Client tests** (`*.svelte.test.ts`): Browser-based tests using Playwright
-2. **Server tests** (`*.test.ts`): Node environment tests
+2. **Server tests** (`*.test.ts`): **Edge runtime environment** tests
+
+### Edge Runtime Testing
+
+Server tests use `environment: 'edge-runtime'` to simulate Cloudflare Workers:
+
+```typescript
+{
+  name: 'server',
+  environment: 'edge-runtime',  // Simulates Cloudflare Workers
+  include: ['src/**/*.{test,spec}.{js,ts}'],
+  exclude: ['src/**/*.svelte.{test,spec}.{js,ts}']
+}
+```
+
+**Why Edge Runtime?**
+
+- Tests run in an environment that closely mimics Cloudflare Workers
+- Catches issues where Node.js-specific APIs are used (which won't work on Workers)
+- Ensures code works in actual deployment environment
+- Validates that no filesystem access or other unsupported APIs are used
+
+See [ARCHITECTURE.md](ARCHITECTURE.md#testing-edge-runtime) for more details.
 
 ## Future Test Enhancements
 

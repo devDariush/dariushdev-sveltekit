@@ -4,7 +4,7 @@ Complete documentation for the Terminal Interface project.
 
 ## 📚 Main Documentation
 
-### [README.md](README.md)
+### [README.md](../README.md)
 
 **Project overview, quick start, and architecture**
 
@@ -29,6 +29,18 @@ Complete documentation for the Terminal Interface project.
 - Persistence strategies
 - Development workflows
 - Customization options
+
+### [ARCHITECTURE.md](ARCHITECTURE.md)
+
+**Deep technical architecture documentation**
+
+- Virtual static files plugin (Vite plugin for Cloudflare Workers)
+- Storage architecture (KV vs cookies, size limits, fallback logic)
+- Persist action (async history saving in JS mode)
+- API endpoints (/api/files, form actions)
+- Progressive enhancement implementation details
+- Edge runtime testing strategy
+- Key architectural decisions and rationale
 
 ### [CLOUDFLARE_DEPLOYMENT.md](CLOUDFLARE_DEPLOYMENT.md)
 
@@ -55,7 +67,7 @@ Complete documentation for the Terminal Interface project.
 
 **Testing strategy and coverage details**
 
-- Test suite overview (71 tests)
+- Test suite overview
 - Test file breakdown
 - Edge cases covered
 - Running tests
@@ -64,7 +76,7 @@ Complete documentation for the Terminal Interface project.
 
 ## 📁 User-Facing Content
 
-### [static/about.md](static/about.md)
+### [static/about.md](../static/about.md)
 
 **About page for terminal users**
 
@@ -72,7 +84,7 @@ Complete documentation for the Terminal Interface project.
 - Available commands teaser
 - Tech stack overview
 
-### [static/docs.md](static/docs.md)
+### [static/docs.md](../static/docs.md)
 
 **In-terminal documentation**
 
@@ -90,7 +102,7 @@ Complete documentation for the Terminal Interface project.
 - `tsconfig.json` - TypeScript configuration
 - `vite.config.ts` - Vite and Vitest config
 - `svelte.config.js` - SvelteKit + Cloudflare adapter
-- `wrangler.toml` - Cloudflare KV bindings
+- `wrangler.jsonc` - Cloudflare KV bindings
 - `playwright.config.ts` - E2E test configuration
 - `eslint.config.js` - Linting rules
 
@@ -103,6 +115,9 @@ Complete documentation for the Terminal Interface project.
 - `src/lib/server/session.ts` - Session management
 - `src/routes/+page.server.ts` - Server actions (execute, persist)
 - `src/routes/Terminal.svelte` - Client terminal component
+- `src/routes/api/files/+server.ts` - File listing API endpoint
+- `src/virtual-static-files.d.ts` - Virtual module type declarations
+- `vite.config.ts` - Virtual static files plugin
 
 ## 🔍 Quick Reference
 
@@ -111,7 +126,7 @@ Complete documentation for the Terminal Interface project.
 ```bash
 npm install          # Install dependencies
 npm run dev          # Start development
-npm run dev:cf       # Dev with local KV
+npm run preview      # Test production build with local KV
 npm run test:unit    # Run tests
 npm run build        # Build for production
 ```
@@ -120,15 +135,15 @@ npm run build        # Build for production
 
 - **Basic**: `help`, `clear`, `ping`, `echo`, `date`, `neofetch`
 - **Files**: `ls`, `cat <file>`
-- **Demo**: `links`, `colors`
+- **Demo**: `colors`
 
 ### Key Features
 
 - ✅ Works without JavaScript (SSR + forms)
 - ✅ Real-time persistence with Cloudflare KV
-- ✅ Markdown rendering with DOMPurify sanitization
+- ✅ Markdown rendering with XSS protection
 - ✅ ANSI color support (16 colors)
-- ✅ 68 comprehensive tests
+- ✅ 71 comprehensive tests
 - ✅ TypeScript strict mode
 - ✅ Accessible (WCAG compliant)
 
@@ -138,6 +153,7 @@ npm run build        # Build for production
 | ------------------------ | ----------- | ------------ | ------------ |
 | README.md                | ✅ Complete | Current      | 100%         |
 | TERMINAL_README.md       | ✅ Complete | Current      | 100%         |
+| ARCHITECTURE.md          | ✅ Complete | Current      | 100%         |
 | CLOUDFLARE_DEPLOYMENT.md | ✅ Complete | Current      | 100%         |
 | COLOR_CODES.md           | ✅ Complete | Current      | 100%         |
 | TEST_COVERAGE.md         | ✅ Complete | Current      | 100%         |
@@ -148,18 +164,23 @@ npm run build        # Build for production
 
 ### ✅ Fully Documented
 
-- Progressive enhancement strategy
-- Command system and execution
-- ANSI color parsing
-- Markdown rendering
-- Session management
-- KV storage integration
-- Cookie-based fallback
-- Testing approach
-- Deployment process
-- File system operations
-- Security measures (sanitization, cookies)
-- Accessibility features
+- Progressive enhancement strategy (dual-mode implementation)
+- Command system and execution (shared logic)
+- ANSI color parsing (16 colors with dark/light mode)
+- Markdown rendering (XSS protection via marked)
+- Session management (UUID-based with secure cookies)
+- KV storage integration (Cloudflare Workers)
+- Cookie-based fallback (automatic size reduction)
+- **Virtual static files plugin** (Vite plugin for Cloudflare compatibility)
+- **Edge runtime testing** (Cloudflare Workers simulation)
+- **Persist action** (async history saving in JS mode)
+- **API endpoints** (/api/files, form actions)
+- **Storage architecture** (KV vs cookies, size limits, fallback logic)
+- Testing approach (71 tests, Vitest + Playwright)
+- Deployment process (Cloudflare Pages + KV setup)
+- File system operations (build-time file listing)
+- Security measures (sanitization, httpOnly cookies, CSRF protection)
+- Accessibility features (WCAG compliant, keyboard navigation)
 
 ### 📋 Implementation Details
 
@@ -171,7 +192,7 @@ npm run build        # Build for production
 
 ## 🚀 Next Steps for Users
 
-1. **New Users**: Start with [README.md](README.md) for overview
+1. **New Users**: Start with [README.md](../README.md) for overview
 2. **Developers**: Read [TERMINAL_README.md](TERMINAL_README.md) for customization
 3. **Deployers**: Follow [CLOUDFLARE_DEPLOYMENT.md](CLOUDFLARE_DEPLOYMENT.md)
 4. **Testers**: Review [TEST_COVERAGE.md](TEST_COVERAGE.md)
