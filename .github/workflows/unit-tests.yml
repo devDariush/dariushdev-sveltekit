@@ -7,21 +7,37 @@ on:
     branches: [main]
 
 jobs:
-  unit-tests:
+  test:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [20]
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js 20
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Svelte sync
+        run: npx svelte-kit sync
+
+      - name: Run unit tests (V8 edge-runtime, no Node APIs)
+        run: npm run test:unit -- --run
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
           cache: npm
 
       - name: Install dependencies
@@ -35,6 +51,3 @@ jobs:
 
       - name: Lint
         run: npm run lint
-
-      - name: Run unit tests (V8 edge-runtime, no Node APIs)
-        run: npm run test:unit -- --run
