@@ -70,6 +70,14 @@ export async function executeCommand(
 					// If it's a markdown file, parse it to HTML
 					if (filename.endsWith('.md')) {
 						const { marked } = await import('marked');
+						marked.use({
+							renderer: {
+								link({ href, title, text }) {
+									// Logic to determine if the link should open in a new tab
+									return `<a href="${href}" target="_blank" rel="noopener noreferrer" title="${title || ''}">${text}</a>`;
+								}
+							}
+						});
 						const html = await marked(content);
 						return { output: html, isHtml: true };
 					}

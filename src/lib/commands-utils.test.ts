@@ -1,8 +1,11 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { executeCommand } from './commands-utils';
 
+const markedMock = vi.fn((content: string) => Promise.resolve(`<h1>${content}</h1>`));
+(markedMock as unknown as Record<string, unknown>).use = vi.fn().mockReturnValue(undefined);
+
 vi.mock('marked', () => ({
-	marked: (content: string) => Promise.resolve(`<h1>${content}</h1>`)
+	marked: markedMock
 }));
 
 describe('commands-utils', () => {
