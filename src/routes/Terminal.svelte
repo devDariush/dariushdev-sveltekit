@@ -47,6 +47,8 @@
 	function toggleTheme() {
 		darkMode = !darkMode;
 		updateTheme();
+		// Persist preference to cookie
+		document.cookie = `dark-mode=${darkMode}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax`;
 	}
 
 	async function handleSubmit() {
