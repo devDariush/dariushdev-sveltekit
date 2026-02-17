@@ -313,4 +313,67 @@ test.describe('Terminal E2E Tests', () => {
 			expect(commandPrompts).toBeLessThanOrEqual(1); // Should be 0 or 1 (only if previous tests ran)
 		});
 	});
+
+	test.describe('Greeting Link Buttons', () => {
+		// Regression test for: focus() without preventScroll caused the scroll container
+		// to jump when input re-focused during the mousedown/mouseup click sequence.
+		// This moved the greeting button out from under the cursor before the click event
+		// fired, silently dropping the command. Consistently reproduced on the 3rd button
+		// click after enough output had accumulated to cause overflow.
+		// Fix: use focus({ preventScroll: true }) in the blur handler and related focus calls.
+		test('should remain clickable after multiple commands cause content overflow', async ({
+			page
+		}) => {
+			await page.goto('/');
+			await page.waitForLoadState('networkidle');
+
+			const input = page.locator('input[type="text"]').first();
+			const terminalBody = page.locator(
+				'[aria-label="Terminal output area, click or press Enter to focus input"]'
+			);
+
+			// Run several commands that produce substantial output so the terminal
+			// container overflows — this is the precondition that triggered the bug.
+			await input.fill('help');
+			await input.press('Enter');
+			await expect(page.getByText('Available commands:')).toBeVisible();
+
+			await input.fill('colors');
+			await input.press('Enter');
+			await expect(page.getByText('Red text')).toBeVisible();
+
+			await input.fill('ping');
+			await input.press('Enter');
+			await expect(page.getByText('pong').last()).toBeVisible();
+
+			// Scroll to the top so the greeting buttons are in view.
+			await terminalBody.evaluate((el) => {
+				el.scrollTop = 0;
+			});
+
+			// Click '[ about ]' — first button, verifies baseline works.
+			await page.getByRole('button', { name: '[ about ]' }).click();
+			await expect(page.getByRole('heading', { name: 'Dariush Komeili' }).last()).toBeVisible();
+
+			// Scroll back to top to access the greeting buttons again.
+			await terminalBody.evaluate((el) => {
+				el.scrollTop = 0;
+			});
+
+			// Click '[ contact ]' — second button.
+			await page.getByRole('button', { name: '[ contact ]' }).click();
+			await expect(page.getByRole('heading', { name: 'Contact' }).last()).toBeVisible();
+
+			// Scroll back to top once more.
+			await terminalBody.evaluate((el) => {
+				el.scrollTop = 0;
+			});
+
+			// Click '[ social ]' — third button. This was the one that silently failed
+			// before the preventScroll fix because the container had enough overflow
+			// content by this point to shift layout on focus().
+			await page.getByRole('button', { name: '[ social ]' }).click();
+			await expect(page.getByRole('heading', { name: 'Social Links' }).last()).toBeVisible();
+		});
+	});
 });
