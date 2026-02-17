@@ -63,7 +63,21 @@
 			<div>
 				{#if entry.isHtml}
 					<!-- Render HTML content (from markdown) -->
-					<div class="markdown-content text-gray-900 dark:text-gray-100">
+					<!-- svelte-ignore a11y_click_events_have_key_events -->
+					<!-- svelte-ignore a11y_no_static_element_interactions -->
+					<div
+						class="markdown-content text-gray-900 dark:text-gray-100"
+						onclick={(e) => {
+							const button = (e.target as HTMLElement).closest('button.terminal-cmd-link');
+							if (button && onLinkClick) {
+								e.preventDefault();
+								const form = button.closest('form');
+								const command =
+									form?.querySelector<HTMLInputElement>('input[name="link-target"]')?.value ?? '';
+								onLinkClick({ type: 'command', text: command, target: command });
+							}
+						}}
+					>
 						{@html entry.content}
 					</div>
 				{:else if hasAnsiCodes(entry.content)}

@@ -160,8 +160,19 @@ Commands can include clickable links in their responses:
 
 - **Command links** (`type: "command"`) - Execute another terminal command when clicked
 - **URL links** (`type: "url"`) - Open a URL in a new tab when clicked
+- **Markdown command links** (`cmd://` scheme) - Execute a terminal command when clicked, inline in rendered markdown
 
-Links are defined in the `links` array of a command and are rendered as clickable elements below the command output.
+Links defined in the `links` array of a command in `commands.json` are rendered as clickable elements below the command output.
+
+### `cmd://` Links in Markdown
+
+Any `.md` file served via `cat` can embed clickable command links using the `cmd://` URL scheme:
+
+```md
+[view PGP key](cmd://cat%20public.asc)
+```
+
+Spaces in the command must be `%20`-encoded. When clicked these execute the command in the terminal exactly like greeting buttons. They work **without JavaScript** via progressive-enhancement `<form>` elements.
 
 ## Development
 
@@ -195,9 +206,10 @@ The terminal supports markdown file rendering:
 2. Use `cat filename.md` to render them
 3. Markdown is parsed with `marked` library
 4. Custom CSS styles applied for headings, lists, code blocks, etc.
-5. All links in rendered markdown open in a new tab (`target="_blank"` with `rel="noopener noreferrer"`)
+5. Regular links open in a new tab (`target="_blank"` with `rel="noopener noreferrer"`)
+6. `cmd://` links render as inline forms that execute a terminal command — works with and without JS
 
-**Security**: Markdown is rendered using the `marked` library. `marked` does *not* sanitize HTML output by default, so you must pass the generated HTML through a trusted HTML sanitizer before injecting it into the DOM. A custom renderer is configured via `marked.use()` to ensure all links include `rel="noopener noreferrer"` when opened in new tabs.
+**Security**: Markdown is rendered using the `marked` library. `marked` does _not_ sanitize HTML output by default, so you must pass the generated HTML through a trusted HTML sanitizer before injecting it into the DOM. A custom renderer is configured via `marked.use()` to ensure regular links include `rel="noopener noreferrer"` when opened in new tabs, and `cmd://` links are converted to `<form>` elements (never executable arbitrary hrefs).
 
 ## Persistence
 
