@@ -55,7 +55,7 @@ Complete documentation for the Terminal Interface project.
 
 **Testing strategy and coverage details**
 
-- Test suite overview (68 tests)
+- Test suite overview (71 tests)
 - Test file breakdown
 - Edge cases covered
 - Running tests

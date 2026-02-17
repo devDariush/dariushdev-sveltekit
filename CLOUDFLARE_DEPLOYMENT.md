@@ -75,9 +75,9 @@ Connect your GitHub repository to Cloudflare Pages for automatic deployments:
    - **Build command**: `npm run build`
    - **Build output directory**: `.svelte-kit/cloudflare`
    - **Deploy command**: Leave empty or remove any custom deploy command
-   
+
    ⚠️ **IMPORTANT**: Do NOT set `npx wrangler deploy` as the deploy command. That's for Workers, not Pages.
-   
+
 5. **Environment Variables**: None needed for basic deployment
 6. **Add KV binding** in Settings → Functions → KV Namespace Bindings:
    - Variable name: `TERMINAL_KV`

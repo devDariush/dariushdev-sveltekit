@@ -2,7 +2,7 @@
 
 ## Overview
 
-Comprehensive test suite with **68 tests passing** covering all core terminal functionality.
+Comprehensive test suite with **71 tests passing** covering all core terminal functionality.
 
 ## Test Files
 
@@ -25,7 +25,7 @@ Tests ANSI color code parsing and detection:
 - Text without ANSI codes
 - Escaped brackets
 
-### 2. commands-utils.test.ts (19 tests)
+### 2. commands-utils.test.ts (23 tests)
 
 Tests command execution logic for all commands:
 

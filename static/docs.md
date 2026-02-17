@@ -56,7 +56,7 @@ Run the test suite:
 npm run test:unit
 ```
 
-**68 tests** covering:
+**71 tests** covering:
 - Command execution
 - ANSI color parsing
 - Session management

@@ -12,7 +12,7 @@ A fully-featured terminal interface built with **SvelteKit 5**, featuring progre
 - 🚀 **Progressive Enhancement** - Full functionality without JavaScript
 - ☁️ **Cloudflare KV Storage** - Unlimited command history with session management
 - ⚡ **Real-time Persistence** - History saved after every command (JS mode)
-- 🧪 **68 Tests** - Comprehensive test coverage with Vitest
+- 🧪 **71 Tests** - Comprehensive test coverage with Vitest
 - 🎯 **TypeScript** - Full type safety throughout
 - ♿ **Accessible** - WCAG compliant with keyboard navigation
 
@@ -78,7 +78,7 @@ npm run test:e2e
 npm test
 ```
 
-**Test Coverage**: 68 tests covering commands, ANSI parsing, session management, file operations, and API endpoints.
+**Test Coverage**: 71 tests covering commands, ANSI parsing, session management, file operations, and API endpoints.
 
 ## 📦 Deployment
 
