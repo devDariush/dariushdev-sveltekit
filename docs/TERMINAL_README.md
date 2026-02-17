@@ -195,8 +195,9 @@ The terminal supports markdown file rendering:
 2. Use `cat filename.md` to render them
 3. Markdown is parsed with `marked` library
 4. Custom CSS styles applied for headings, lists, code blocks, etc.
+5. All links in rendered markdown open in a new tab (`target="_blank"` with `rel="noopener noreferrer"`)
 
-**Security**: Markdown is rendered using the `marked` library which has built-in XSS protection.
+**Security**: Markdown is rendered using the `marked` library. `marked` does *not* sanitize HTML output by default, so you must pass the generated HTML through a trusted HTML sanitizer before injecting it into the DOM. A custom renderer is configured via `marked.use()` to ensure all links include `rel="noopener noreferrer"` when opened in new tabs.
 
 ## Persistence
 
