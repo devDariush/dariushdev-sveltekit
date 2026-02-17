@@ -40,7 +40,7 @@ Files are served from the `/static` folder.
 
 ## Color Codes
 
-See `COLOR_CODES.md` in the project root for full ANSI color reference.
+See `docs/COLOR_CODES.md` in the project for full ANSI color reference.
 
 ## Keyboard Shortcuts
 
@@ -62,7 +62,7 @@ Comprehensive test coverage including:
 - File operations
 - API endpoints
 
-See `TEST_COVERAGE.md` for detailed information.
+See `docs/TEST_COVERAGE.md` for detailed information.
 
 ---
 

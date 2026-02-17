@@ -34,10 +34,10 @@ npm run build
 
 ## 📖 Documentation
 
-- [Terminal Usage Guide](TERMINAL_README.md) - Commands, customization, and features
-- [Cloudflare Deployment](CLOUDFLARE_DEPLOYMENT.md) - Production deployment guide
-- [Color Codes Reference](COLOR_CODES.md) - ANSI color code documentation
-- [Test Coverage](TEST_COVERAGE.md) - Testing strategy and coverage details
+- [Terminal Usage Guide](docs/TERMINAL_README.md) - Commands, customization, and features
+- [Cloudflare Deployment](docs/CLOUDFLARE_DEPLOYMENT.md) - Production deployment guide
+- [Color Codes Reference](docs/COLOR_CODES.md) - ANSI color code documentation
+- [Test Coverage](docs/TEST_COVERAGE.md) - Testing strategy and coverage details
 
 ## 🏗️ Architecture
 
@@ -78,13 +78,13 @@ npm run test:e2e
 npm test
 ```
 
-**Test Coverage**: Comprehensive test suite covering commands, ANSI parsing, session management, file operations, and API endpoints. See [TEST_COVERAGE.md](TEST_COVERAGE.md) for details.
+**Test Coverage**: Comprehensive test suite covering commands, ANSI parsing, session management, file operations, and API endpoints. See [docs/TEST_COVERAGE.md](docs/TEST_COVERAGE.md) for details.
 
 ## 📦 Deployment
 
 ### Cloudflare Pages
 
-See [CLOUDFLARE_DEPLOYMENT.md](CLOUDFLARE_DEPLOYMENT.md) for complete deployment instructions.
+See [docs/CLOUDFLARE_DEPLOYMENT.md](docs/CLOUDFLARE_DEPLOYMENT.md) for complete deployment instructions.
 
 ```sh
 # Build and deploy

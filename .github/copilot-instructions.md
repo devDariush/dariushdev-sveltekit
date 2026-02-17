@@ -304,8 +304,8 @@ cookies.set('name', value, {
 When adding features, update:
 
 1. **README.md** - If it's a major feature
-2. **TERMINAL_README.md** - If it adds commands or changes behavior
-3. **TEST_COVERAGE.md** - When adding new test files
+2. **docs/TERMINAL_README.md** - If it adds commands or changes behavior
+3. **docs/TEST_COVERAGE.md** - When adding new test files
 4. **static/docs.md** - If users need to know about it
 5. **Code Comments** - For complex logic
 

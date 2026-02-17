@@ -4,7 +4,7 @@ Complete documentation for the Terminal Interface project.
 
 ## 📚 Main Documentation
 
-### [README.md](README.md)
+### [README.md](../README.md)
 
 **Project overview, quick start, and architecture**
 
@@ -64,7 +64,7 @@ Complete documentation for the Terminal Interface project.
 
 ## 📁 User-Facing Content
 
-### [static/about.md](static/about.md)
+### [static/about.md](../static/about.md)
 
 **About page for terminal users**
 
@@ -72,7 +72,7 @@ Complete documentation for the Terminal Interface project.
 - Available commands teaser
 - Tech stack overview
 
-### [static/docs.md](static/docs.md)
+### [static/docs.md](../static/docs.md)
 
 **In-terminal documentation**
 
@@ -171,7 +171,7 @@ npm run build        # Build for production
 
 ## 🚀 Next Steps for Users
 
-1. **New Users**: Start with [README.md](README.md) for overview
+1. **New Users**: Start with [README.md](../README.md) for overview
 2. **Developers**: Read [TERMINAL_README.md](TERMINAL_README.md) for customization
 3. **Deployers**: Follow [CLOUDFLARE_DEPLOYMENT.md](CLOUDFLARE_DEPLOYMENT.md)
 4. **Testers**: Review [TEST_COVERAGE.md](TEST_COVERAGE.md)
