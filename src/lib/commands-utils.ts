@@ -73,7 +73,12 @@ export async function executeCommand(
 						marked.use({
 							renderer: {
 								link({ href, title, text }) {
-									// Logic to determine if the link should open in a new tab
+									// Command links (cmd://) are handled by the terminal via event delegation
+									if (href && href.startsWith('cmd://')) {
+										const command = decodeURIComponent(href.slice(6));
+										return `<a href="${href}" class="terminal-cmd-link" title="Run: ${command}">${text}</a>`;
+									}
+									// Regular links open in a new tab
 									return `<a href="${href}" target="_blank" rel="noopener noreferrer" title="${title || ''}">${text}</a>`;
 								}
 							}

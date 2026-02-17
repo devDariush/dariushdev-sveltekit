@@ -63,7 +63,22 @@
 			<div>
 				{#if entry.isHtml}
 					<!-- Render HTML content (from markdown) -->
-					<div class="markdown-content text-gray-900 dark:text-gray-100">
+					<!-- svelte-ignore a11y_click_events_have_key_events -->
+					<!-- svelte-ignore a11y_no_static_element_interactions -->
+					<div
+						class="markdown-content text-gray-900 dark:text-gray-100"
+						onclick={(e) => {
+							const anchor = (e.target as HTMLElement).closest('a');
+							if (anchor) {
+								const href = anchor.getAttribute('href') ?? '';
+								if (href.startsWith('cmd://')) {
+									e.preventDefault();
+									const command = decodeURIComponent(href.slice(6));
+									onLinkClick?.({ type: 'command', text: command, target: command });
+								}
+							}
+						}}
+					>
 						{@html entry.content}
 					</div>
 				{:else if hasAnsiCodes(entry.content)}

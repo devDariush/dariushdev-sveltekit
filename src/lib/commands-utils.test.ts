@@ -139,6 +139,35 @@ describe('commands-utils', () => {
 				await executeCommand('cat', ['social.md'], { fetch: mockFetch });
 				expect(mockFetch).toHaveBeenCalledWith('/social.md');
 			});
+
+			it('should render cmd:// links as terminal command links', async () => {
+				const mockFetch = vi.fn().mockResolvedValue({
+					ok: true,
+					text: () => Promise.resolve('# Hello')
+				});
+				await executeCommand('cat', ['test.md'], { fetch: mockFetch });
+
+				// Capture the renderer config passed to marked.use
+				const useMock = (markedMock as unknown as Record<string, ReturnType<typeof vi.fn>>).use;
+				expect(useMock).toHaveBeenCalled();
+				const rendererConfig = useMock.mock.calls[0][0] as {
+					renderer: { link: (args: { href: string; title: string; text: string }) => string };
+				};
+				const linkFn = rendererConfig.renderer.link;
+
+				// cmd:// links should render with terminal-cmd-link class and no target="_blank"
+				const cmdLink = linkFn({ href: 'cmd://cat%20public.asc', title: '', text: 'PGP Key' });
+				expect(cmdLink).toContain('class="terminal-cmd-link"');
+				expect(cmdLink).toContain('href="cmd://cat%20public.asc"');
+				expect(cmdLink).not.toContain('target="_blank"');
+				expect(cmdLink).toContain('Run: cat public.asc');
+
+				// Regular links should still open in a new tab
+				const regularLink = linkFn({ href: 'https://example.com', title: '', text: 'Example' });
+				expect(regularLink).toContain('target="_blank"');
+				expect(regularLink).toContain('rel="noopener noreferrer"');
+				expect(regularLink).not.toContain('terminal-cmd-link');
+			});
 		});
 
 		describe('ls command', () => {

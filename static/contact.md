@@ -7,4 +7,4 @@
 
 ## Email
 
-- dkomeili(@)proton.me — [PGP Key: EC05 0792 D47C C705](https://dariush.dev/keychain/dkomeili(a)proton.me/publickey.dkomeili@proton.me-860f37fc1be388567c72c6b5ec050792d47cc705.asc)
+- dkomeili(@)proton.me — [PGP Key: EC05 0792 D47C C705](cmd://cat%20public.asc)
