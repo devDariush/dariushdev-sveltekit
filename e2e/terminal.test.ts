@@ -120,6 +120,31 @@ test.describe('Terminal E2E Tests', () => {
 
 			await expect(page.getByText('No such file or directory')).toBeVisible();
 		});
+
+		test('should render markdown links with target="_blank" and rel="noopener noreferrer"', async ({
+			page
+		}) => {
+			await page.goto('/');
+			await page.waitForLoadState('networkidle');
+
+			const input = page.locator('input[type="text"]').first();
+			await input.fill('cat about.md');
+			await input.press('Enter');
+
+			// Wait for markdown content to appear
+			await expect(page.getByRole('heading', { name: 'About' })).toBeVisible();
+
+			// All links in the rendered markdown output should open in a new tab
+			const renderedLinks = page.locator('.markdown-content a');
+			const count = await renderedLinks.count();
+			expect(count).toBeGreaterThan(0);
+
+			for (let i = 0; i < count; i++) {
+				const link = renderedLinks.nth(i);
+				await expect(link).toHaveAttribute('target', '_blank');
+				await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+			}
+		});
 	});
 
 	test.describe('Theme Toggle', () => {
