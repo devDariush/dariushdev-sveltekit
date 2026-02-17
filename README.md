@@ -34,6 +34,7 @@ npm run build
 
 ## 📖 Documentation
 
+- [Contributing Guide](CONTRIBUTING.md) - How to contribute to the project
 - [Terminal Usage Guide](docs/TERMINAL_README.md) - Commands, customization, and features
 - [Architecture Deep Dive](docs/ARCHITECTURE.md) - Technical implementation details
 - [Cloudflare Deployment](docs/CLOUDFLARE_DEPLOYMENT.md) - Production deployment guide

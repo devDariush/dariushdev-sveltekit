@@ -15,6 +15,19 @@ Complete documentation for the Terminal Interface project.
 - Deployment instructions
 - Tech stack
 
+### [CONTRIBUTING.md](../CONTRIBUTING.md)
+
+**Contribution guidelines and development workflow**
+
+- Getting started guide
+- Contribution workflow (fork, branch, PR)
+- Testing requirements and patterns
+- Documentation requirements
+- Coding standards
+- Adding new commands
+- Security guidelines
+- Areas for contribution
+
 ### [TERMINAL_README.md](TERMINAL_README.md)
 
 **Detailed terminal usage and customization guide**
