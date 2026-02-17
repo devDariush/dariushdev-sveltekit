@@ -68,14 +68,13 @@
 					<div
 						class="markdown-content text-gray-900 dark:text-gray-100"
 						onclick={(e) => {
-							const anchor = (e.target as HTMLElement).closest('a');
-							if (anchor) {
-								const href = anchor.getAttribute('href') ?? '';
-								if (href.startsWith('cmd://')) {
-									e.preventDefault();
-									const command = decodeURIComponent(href.slice(6));
-									onLinkClick?.({ type: 'command', text: command, target: command });
-								}
+							const button = (e.target as HTMLElement).closest('button.terminal-cmd-link');
+							if (button && onLinkClick) {
+								e.preventDefault();
+								const form = button.closest('form');
+								const command =
+									form?.querySelector<HTMLInputElement>('input[name="link-target"]')?.value ?? '';
+								onLinkClick({ type: 'command', text: command, target: command });
 							}
 						}}
 					>

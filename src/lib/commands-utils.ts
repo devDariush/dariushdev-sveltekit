@@ -73,10 +73,10 @@ export async function executeCommand(
 						marked.use({
 							renderer: {
 								link({ href, title, text }) {
-									// Command links (cmd://) are handled by the terminal via event delegation
+									// Command links (cmd://) render as forms for NoJS progressive enhancement
 									if (href && href.startsWith('cmd://')) {
 										const command = decodeURIComponent(href.slice(6));
-										return `<a href="${href}" class="terminal-cmd-link" title="Run: ${command}">${text}</a>`;
+										return `<form method="POST" action="?/execute" class="inline-block"><input type="hidden" name="action" value="link-click" /><input type="hidden" name="link-type" value="command" /><input type="hidden" name="link-target" value="${command}" /><button type="submit" class="terminal-cmd-link" title="Run: ${command}">${text}</button></form>`;
 									}
 									// Regular links open in a new tab
 									return `<a href="${href}" target="_blank" rel="noopener noreferrer" title="${title || ''}">${text}</a>`;
