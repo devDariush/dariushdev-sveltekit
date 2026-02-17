@@ -33,7 +33,7 @@ Tests command execution logic for all commands:
 - ✅ Built-in commands: ping, help, clear, echo, date, neofetch, colors
 - ✅ Case insensitive command handling
 - ✅ Echo with special characters
-- ✅ Cat command (file reading, markdown parsing, error handling)
+- ✅ Cat command (file reading, markdown parsing, error handling, links open in new tab)
 - ✅ Ls command (file listing, fetch errors, empty lists)
 
 **Edge cases covered:**
@@ -44,6 +44,10 @@ Tests command execution logic for all commands:
 - Server vs client execution paths
 - Fetch failures
 - Empty file lists
+
+**Mocking notes:**
+
+- The `marked` mock includes a `.use()` stub to support the custom link renderer (`target="_blank"`) without throwing errors during tests
 
 ### 3. session.test.ts
 
