@@ -140,6 +140,60 @@ describe('commands-utils', () => {
 				expect(mockFetch).toHaveBeenCalledWith('/social.md');
 			});
 
+			describe('image rendering', () => {
+				it('should render a .png as an <img> tag with isHtml', async () => {
+					const mockFetch = vi.fn().mockResolvedValue({ ok: true });
+					const result = await executeCommand('cat', ['profile.png'], { fetch: mockFetch });
+					expect(result.isHtml).toBe(true);
+					expect(result.output).toContain('<img');
+					expect(result.output).toContain('src="/profile.png"');
+					expect(result.output).toContain('alt="profile.png"');
+				});
+
+				it('should use a HEAD request for image existence check', async () => {
+					const mockFetch = vi.fn().mockResolvedValue({ ok: true });
+					await executeCommand('cat', ['photo.jpg'], { fetch: mockFetch });
+					expect(mockFetch).toHaveBeenCalledWith('/photo.jpg', { method: 'HEAD' });
+					// Must NOT have issued a second GET
+					expect(mockFetch).toHaveBeenCalledTimes(1);
+				});
+
+				it('should return file-not-found when HEAD returns 404 for image', async () => {
+					const mockFetch = vi.fn().mockResolvedValue({ ok: false, status: 404 });
+					const result = await executeCommand('cat', ['missing.png'], { fetch: mockFetch });
+					expect(result.output).toContain('No such file or directory');
+					expect(result.isHtml).toBeUndefined();
+				});
+
+				it.each(['.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg', '.avif'])(
+					'should detect %s as an image extension',
+					async (ext) => {
+						const mockFetch = vi.fn().mockResolvedValue({ ok: true });
+						const result = await executeCommand('cat', [`image${ext}`], { fetch: mockFetch });
+						expect(result.isHtml).toBe(true);
+						expect(result.output).toContain('<img');
+					}
+				);
+
+				it('should match image extensions case-insensitively', async () => {
+					const mockFetch = vi.fn().mockResolvedValue({ ok: true });
+					const result = await executeCommand('cat', ['Photo.PNG'], { fetch: mockFetch });
+					expect(result.isHtml).toBe(true);
+					expect(result.output).toContain('<img');
+					expect(result.output).toContain('src="/Photo.PNG"');
+				});
+
+				it('should not treat a non-image extension as an image', async () => {
+					const mockFetch = vi.fn().mockResolvedValue({
+						ok: true,
+						text: () => Promise.resolve('plain content')
+					});
+					const result = await executeCommand('cat', ['file.txt'], { fetch: mockFetch });
+					expect(result.output).toBe('plain content');
+					expect(result.isHtml).toBeUndefined();
+				});
+			});
+
 			it('should render cmd:// links as NoJS-compatible forms', async () => {
 				const mockFetch = vi.fn().mockResolvedValue({
 					ok: true,
