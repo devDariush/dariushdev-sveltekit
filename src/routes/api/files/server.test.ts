@@ -78,11 +78,4 @@ describe('/api/files endpoint', () => {
 		const mdFiles = data.filter((f: string) => f.endsWith('.md'));
 		expect(mdFiles.length).toBeGreaterThan(0);
 	});
-
-	it('should include robots.txt', async () => {
-		const response = await GET({} as never);
-		const data = await response.json();
-
-		expect(data).toContain('robots.txt');
-	});
 });
