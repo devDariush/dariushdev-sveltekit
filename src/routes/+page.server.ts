@@ -42,7 +42,7 @@ export const load: PageServerLoad = async ({ cookies, platform }) => {
 
 	return {
 		history,
-		darkMode: darkModeCookie === 'true' || darkModeCookie === null,
+		darkMode: darkModeCookie !== 'false',
 		greeting: config.greeting
 	};
 };
