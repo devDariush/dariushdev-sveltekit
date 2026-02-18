@@ -11,7 +11,7 @@ const config = terminalConfig as TerminalConfig;
 export async function executeCommand(
 	cmd: string,
 	args: string[],
-	options?: { fetch?: (url: string) => Promise<Response> }
+	options?: { fetch?: (url: string, init?: RequestInit) => Promise<Response> }
 ): Promise<{ output: string; links?: Link[]; isGreeting?: boolean; isHtml?: boolean }> {
 	const command = config.commands[cmd.toLowerCase()];
 
@@ -59,19 +59,26 @@ export async function executeCommand(
 					// Use provided fetch (ASSETS binding on Cloudflare, event.fetch locally)
 					// or fall back to globalThis.fetch (client-side)
 					const fetchFn = options?.fetch ?? globalThis.fetch;
+
+					// For images, use a HEAD request to check existence without downloading the body
+					const IMAGE_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg', '.avif'];
+					if (IMAGE_EXTENSIONS.some((ext) => filename.toLowerCase().endsWith(ext))) {
+						const head = await fetchFn(`/${filename}`, { method: 'HEAD' });
+						if (!head.ok) {
+							return {
+								output: `cat: ${filename}: No such file or directory\n\nUse "ls" to see available files`
+							};
+						}
+						return {
+							output: `<img src="/${filename}" alt="${filename}" style="max-width:100%;max-height:300px;display:block;margin-top:0.5rem;" />`,
+							isHtml: true
+						};
+					}
+
 					const response = await fetchFn(`/${filename}`);
 					if (!response.ok) {
 						return {
 							output: `cat: ${filename}: No such file or directory\n\nUse "ls" to see available files`
-						};
-					}
-
-					// If it's an image, render it as an <img> tag
-					const IMAGE_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg', '.avif'];
-					if (IMAGE_EXTENSIONS.some((ext) => filename.toLowerCase().endsWith(ext))) {
-						return {
-							output: `<img src="/${filename}" alt="${filename}" style="max-width:100%;max-height:300px;display:block;margin-top:0.5rem;" />`,
-							isHtml: true
 						};
 					}
 
