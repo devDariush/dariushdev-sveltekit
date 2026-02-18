@@ -4,6 +4,7 @@
 	import TerminalOutput from '$lib/components/TerminalOutput.svelte';
 	import TerminalInput from '$lib/components/TerminalInput.svelte';
 	import { executeCommand, config } from '$lib/commands-utils';
+	import { hasOnScreenKeyboard } from '$lib/device';
 	import type { HistoryEntry, Link } from '$lib/types/terminal';
 
 	interface Props {
@@ -32,8 +33,10 @@
 		// Apply theme to document
 		updateTheme();
 
-		// Focus input
-		inputElement?.focus();
+		// Focus input (skip on devices with on-screen keyboards to avoid keyboard popup)
+		if (!hasOnScreenKeyboard()) {
+			inputElement?.focus();
+		}
 	});
 
 	function updateTheme() {
@@ -115,7 +118,9 @@
 		} else if (link.type === 'url') {
 			window.open(link.target, '_blank', 'noopener,noreferrer');
 		}
-		setTimeout(() => inputElement?.focus({ preventScroll: true }), 0);
+		if (!hasOnScreenKeyboard()) {
+			setTimeout(() => inputElement?.focus({ preventScroll: true }), 0);
+		}
 	}
 
 	function handleInput(value: string) {
@@ -127,12 +132,14 @@
 	}
 
 	function focusInput() {
-		inputElement?.focus({ preventScroll: true });
+		if (!hasOnScreenKeyboard()) {
+			inputElement?.focus({ preventScroll: true });
+		}
 	}
 </script>
 
 <div
-	class="flex h-screen w-screen flex-col bg-white font-mono text-sm transition-colors dark:bg-gray-900"
+	class="flex h-screen w-screen flex-col overflow-x-hidden bg-white font-mono text-sm transition-colors dark:bg-gray-900"
 >
 	<TerminalHeader {darkMode} onToggleTheme={toggleTheme} />
 
