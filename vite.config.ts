@@ -24,9 +24,13 @@ function staticFilesPlugin(): Plugin {
 			if (id === resolvedVirtualModuleId) {
 				const staticDir = join(process.cwd(), 'static');
 				try {
+					const HIDDEN_FILES = new Set(['sitemap.xml', 'robots.txt']);
 					const entries = readdirSync(staticDir, { withFileTypes: true });
 					const files = entries
-						.filter((entry) => entry.isFile() && !entry.name.startsWith('.'))
+						.filter(
+							(entry) =>
+								entry.isFile() && !entry.name.startsWith('.') && !HIDDEN_FILES.has(entry.name)
+						)
 						.map((entry) => entry.name)
 						.sort();
 					return `export const staticFiles = ${JSON.stringify(files)};`;
