@@ -332,7 +332,7 @@ export const GET: RequestHandler = async () => {
 **Response Format**:
 
 ```json
-["about.md", "contact.md", "docs.md", "robots.txt", "social.md"]
+["about.md", "contact.md", "docs.md", "profile.png", "social.md"]
 ```
 
 **Characteristics**:
@@ -340,6 +340,7 @@ export const GET: RequestHandler = async () => {
 - Returns alphabetically sorted file list
 - Excludes hidden files (starting with `.`)
 - Excludes directories
+- Excludes infrastructure files not intended for terminal users (`robots.txt`, `sitemap.xml`)
 - Uses virtual static files plugin (works on Cloudflare)
 - No authentication required (public files)
 
