@@ -65,6 +65,16 @@ export async function executeCommand(
 							output: `cat: ${filename}: No such file or directory\n\nUse "ls" to see available files`
 						};
 					}
+
+					// If it's an image, render it as an <img> tag
+					const IMAGE_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg', '.avif'];
+					if (IMAGE_EXTENSIONS.some((ext) => filename.toLowerCase().endsWith(ext))) {
+						return {
+							output: `<img src="/${filename}" alt="${filename}" style="max-width:100%;max-height:300px;display:block;margin-top:0.5rem;" />`,
+							isHtml: true
+						};
+					}
+
 					const content = await response.text();
 
 					// If it's a markdown file, parse it to HTML
