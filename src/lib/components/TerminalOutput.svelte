@@ -20,7 +20,7 @@
 	{#each history as entry, i (i)}
 		{#if entry.type === 'greeting'}
 			<pre
-				class="m-0 font-mono leading-tight whitespace-pre text-blue-600 dark:text-blue-400">{entry.content}</pre>
+				class="m-0 max-w-full overflow-x-auto font-mono leading-tight whitespace-pre text-blue-600 dark:text-blue-400">{entry.content}</pre>
 			{#if entry.links && entry.links.length > 0}
 				<div class="mt-3 mb-5 flex flex-wrap gap-3 font-mono">
 					{#each entry.links as link, k (k)}

@@ -32,8 +32,10 @@
 		// Apply theme to document
 		updateTheme();
 
-		// Focus input
-		inputElement?.focus();
+		// Focus input (skip on mobile to avoid keyboard popup)
+		if (!isMobile()) {
+			inputElement?.focus();
+		}
 	});
 
 	function updateTheme() {
@@ -108,6 +110,10 @@
 		}
 	}
 
+	function isMobile(): boolean {
+		return typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
+	}
+
 	function handleLinkClick(link: Link) {
 		if (link.type === 'command') {
 			input = link.target;
@@ -115,7 +121,9 @@
 		} else if (link.type === 'url') {
 			window.open(link.target, '_blank', 'noopener,noreferrer');
 		}
-		setTimeout(() => inputElement?.focus({ preventScroll: true }), 0);
+		if (!isMobile()) {
+			setTimeout(() => inputElement?.focus({ preventScroll: true }), 0);
+		}
 	}
 
 	function handleInput(value: string) {
@@ -127,12 +135,14 @@
 	}
 
 	function focusInput() {
-		inputElement?.focus({ preventScroll: true });
+		if (!isMobile()) {
+			inputElement?.focus({ preventScroll: true });
+		}
 	}
 </script>
 
 <div
-	class="flex h-screen w-screen flex-col bg-white font-mono text-sm transition-colors dark:bg-gray-900"
+	class="flex h-screen w-screen flex-col overflow-x-hidden bg-white font-mono text-sm transition-colors dark:bg-gray-900"
 >
 	<TerminalHeader {darkMode} onToggleTheme={toggleTheme} />
 

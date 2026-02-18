@@ -29,7 +29,12 @@
 		}
 	}
 
+	function isMobile(): boolean {
+		return typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
+	}
+
 	function handleBlur(e: FocusEvent) {
+		if (isMobile()) return;
 		const target = e.target as HTMLInputElement;
 		target?.focus({ preventScroll: true });
 	}
@@ -67,7 +72,7 @@
 			onkeydown={handleKeyDown}
 			onblur={handleBlur}
 			type="text"
-			class="w-full border-none bg-transparent font-mono text-gray-900 outline-none dark:text-gray-100"
+			class="w-full border-none bg-transparent font-mono text-base text-gray-900 outline-none md:text-sm dark:text-gray-100"
 			style="caret-color: transparent;"
 			spellcheck="false"
 			autocomplete="off"
