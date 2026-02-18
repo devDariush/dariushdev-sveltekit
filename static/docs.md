@@ -48,21 +48,10 @@ See `docs/COLOR_CODES.md` in the project for full ANSI color reference.
 - `Click anywhere` - Focus input
 - `Space/Enter on terminal area` - Focus input
 
-## Testing
+## Source Code
 
-Run the test suite:
-```
-npm run test:unit
-```
-
-Comprehensive test coverage including:
-- Command execution
-- ANSI color parsing
-- Session management
-- File operations
-- API endpoints
-
-See `docs/TEST_COVERAGE.md` for detailed information.
+This website is 100% FOSS under the AGPL-3.0 license.
+You can find the codebase [in this GitHub repo](https://github.com/devDariush/dariushdev-sveltekit).
 
 ---
 
