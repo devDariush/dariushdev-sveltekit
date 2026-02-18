@@ -40,31 +40,5 @@
 		content="Computer Science Student at HHU. Based in Düsseldorf. Interested in XR. Monero fanatic. Privacy-conscious."
 	/>
 	<meta name="twitter:image" content="https://dariush.dev/profile.png" />
-
-	<!-- JSON-LD Structured Data -->
-	{@html `<script type="application/ld+json">${JSON.stringify({
-		'@context': 'https://schema.org',
-		'@type': 'Person',
-		name: 'Dariush Komeili',
-		url: 'https://dariush.dev',
-		image: 'https://dariush.dev/profile.png',
-		jobTitle: 'Computer Science Student',
-		affiliation: {
-			'@type': 'CollegeOrUniversity',
-			name: 'Heinrich Heine University Düsseldorf'
-		},
-		address: {
-			'@type': 'PostalAddress',
-			addressLocality: 'Düsseldorf',
-			addressCountry: 'DE'
-		},
-		sameAs: [
-			'https://github.com/devDariush',
-			'https://www.linkedin.com/in/dariush-komeili-a44796232',
-			'https://bsky.app/profile/dariush.dev',
-			'https://fosstodon.org/@camey',
-			'https://blog.dariush.dev'
-		]
-	})}<\/script>`}
 </svelte:head>
 {@render children()}
