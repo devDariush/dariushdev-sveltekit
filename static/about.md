@@ -1,20 +1,21 @@
 # Dariush Komeili
 
-Computer Science Student at [Heinrich Heine University](https://www.hhu.de/en/), Düsseldorf.
+Computer Science Student at [Heinrich Heine University](https://www.hhu.de/en/), Düsseldorf. Software dev for a German startup.
 
 ## About
 
 Passionate about Privacy, Digital Freedom & All Things Tech.
-
-Into Monero, TOR, privacy tech, backend development, mixed reality and more.
-Currently studying CS. Connect via Signal or SimpleX.
+  
+Currently studying CS. Connect via Signal, Matrix, or SimpleX.
 
 ## Skills
 
 - **Languages:** Python, TypeScript, Java
-- **Backend:** FastAPI, Docker
-- **Frontend:** SvelteKit, Svelte 5
-- **Interests:** AI Automation, XR Development, Privacy Tech
+- **Backend:** FastAPI, Django, Docker, Podman, SvelteKit
+- **Frontend:** SvelteKit, Svelte 5, Vue (Composition)
+- **DevSecOps:** CI/CD, Edge, SQL/NoSQL, ORMs, OCI
+- **Unpaid stuff:** Monero, P2P, TOR, Arch, NixOS, fediverse
+- **Interests:** Operating Systems, Networking, Security, Free Decentralized Web, FOSS
 
 ## Referrals
 
