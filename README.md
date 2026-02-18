@@ -2,6 +2,8 @@
 
 A fully-featured terminal interface built with **SvelteKit 5**, featuring progressive enhancement, Cloudflare KV storage, markdown rendering, and comprehensive test coverage.
 
+🌐 **Live Demo**: [https://dariush.dev](https://dariush.dev)
+
 ## ✨ Features
 
 - 🎨 **ANSI Color Support** - Full 16-color ANSI code parsing

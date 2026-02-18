@@ -65,6 +65,9 @@ Complete documentation for the Terminal Interface project.
 - Local development with KV
 - Testing strategies
 - Architecture details
+- **Custom domain setup** (dariush.dev configuration)
+- DNS configuration and redirects
+- SSL/TLS provisioning
 - Troubleshooting
 
 ### [COLOR_CODES.md](COLOR_CODES.md)

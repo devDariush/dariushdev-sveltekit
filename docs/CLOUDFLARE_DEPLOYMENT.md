@@ -122,3 +122,88 @@ This will:
 ## Environment Variables
 
 None required! The app automatically detects Cloudflare platform and uses KV when available.
+
+## Custom Domain Setup
+
+To use your custom domain `dariush.dev` (or any domain on Cloudflare):
+
+### Configuration in `wrangler.jsonc`
+
+You can configure your custom domain directly in the `wrangler.jsonc` file using the `routes` property. For example:
+
+```jsonc
+"routes": [
+	{
+		"pattern": "dariush.dev",
+		"custom_domain": true
+	},
+	{
+		"pattern": "www.dariush.dev",
+		"custom_domain": true
+	}
+]
+```
+
+This configuration ensures that your Worker is accessible via both `dariush.dev` and `www.dariush.dev`. You can also add additional routes as needed.
+
+### Redirects (Optional)
+
+To redirect `www.dariush.dev` → `dariush.dev` (or vice versa):
+
+#### Using `_redirects` File
+
+The project already includes a `_redirects` file at the root. You can add:
+
+```
+# Redirect www to apex domain
+https://www.dariush.dev/* https://dariush.dev/:splat 301!
+
+# Or redirect apex to www
+# https://dariush.dev/* https://www.dariush.dev/:splat 301!
+```
+
+#### Using Cloudflare Page Rules
+
+Alternatively, use Cloudflare Page Rules or Bulk Redirects:
+
+1. Go to your domain in Cloudflare Dashboard
+2. Navigate to **Rules** → **Page Rules** (or **Bulk Redirects**)
+3. Create a forwarding rule:
+   - URL Match: `www.dariush.dev/*`
+   - Forwarding URL: `https://dariush.dev/$1`
+   - Status: `301 - Permanent Redirect`
+
+### Verification
+
+Once configured, test your domain:
+
+```bash
+# Check DNS propagation
+dig dariush.dev
+
+# Test HTTPS
+curl -I https://dariush.dev
+
+# Open in browser
+open https://dariush.dev
+```
+
+### Troubleshooting
+
+**Domain not working?**
+
+- Ensure the `routes` property is correctly configured in `wrangler.jsonc`
+- Wait 5-10 minutes for DNS propagation
+- Check SSL certificate status in Cloudflare Dashboard
+- Clear browser cache or test in incognito mode
+
+**SSL Certificate Error?**
+
+- SSL provisioning can take up to 24 hours (usually < 5 minutes)
+- Ensure domain is added in Pages Custom domains section
+- Check Universal SSL is enabled: SSL/TLS → Overview → Edge Certificates
+
+**Redirect Loop?**
+
+- Check for conflicting redirect rules in multiple places (\_redirects file, Page Rules, etc.)
+- Ensure only one redirect configuration is active
