@@ -36,10 +36,16 @@ function staticFilesPlugin(): Plugin {
     },
     load(id) {
       if (id === resolvedVirtualModuleId) {
+        const HIDDEN_FILES = new Set(['sitemap.xml', 'robots.txt']);
         const staticDir = join(process.cwd(), 'static');
         const entries = readdirSync(staticDir, { withFileTypes: true });
         const files = entries
-          .filter((entry) => entry.isFile() && !entry.name.startsWith('.'))
+          .filter(
+            (entry) =>
+              entry.isFile() &&
+              !entry.name.startsWith('.') &&
+              !HIDDEN_FILES.has(entry.name)
+          )
           .map((entry) => entry.name)
           .sort();
         return `export const staticFiles = ${JSON.stringify(files)};`;
@@ -87,6 +93,7 @@ export const GET: RequestHandler = async () => {
 - ✅ No runtime overhead (file list is static, bundled at build time)
 - ✅ Consistent behavior across environments
 - ✅ Automatically excludes hidden files (those starting with `.`)
+- ✅ Excludes infrastructure files not shown to terminal users (`robots.txt`, `sitemap.xml`) via a `HIDDEN_FILES` set
 - ✅ Alphabetically sorted file list
 
 ---

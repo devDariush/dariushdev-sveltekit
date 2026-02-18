@@ -34,6 +34,7 @@ Tests command execution logic for all commands:
 - ✅ Case insensitive command handling
 - ✅ Echo with special characters
 - ✅ Cat command (file reading, markdown parsing, error handling)
+- ✅ Cat command: image files (`.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`, `.svg`, `.avif`) rendered as `<img>` HTML via a HEAD-only existence check
 - ✅ `cmd://` links render as NoJS-compatible `<form>` elements; regular links open in new tab
 - ✅ Ls command (file listing, fetch errors, empty lists)
 
@@ -42,6 +43,9 @@ Tests command execution logic for all commands:
 - Empty arguments (echo with no args)
 - Special characters in arguments
 - File not found (cat command)
+- Image 404 returns file-not-found message
+- Case-insensitive image extension detection (e.g. `Photo.PNG`)
+- HEAD request used for images (no body downloaded)
 - Server vs client execution paths
 - Fetch failures
 - Empty file lists

@@ -156,7 +156,9 @@ npm run build        # Build for production
 - ✅ Real-time persistence with Cloudflare KV
 - ✅ Markdown rendering with XSS protection
 - ✅ ANSI color support (16 colors)
-- ✅ 72 comprehensive tests
+- ✅ Image rendering via `cat` (HEAD-only fetch, inline `<img>` output)
+- ✅ Full SEO: title, description, Open Graph, Twitter Card, JSON-LD, sitemap
+- ✅ 83 comprehensive tests
 - ✅ TypeScript strict mode
 - ✅ Accessible (WCAG compliant)
 
@@ -189,7 +191,7 @@ npm run build        # Build for production
 - **Persist action** (async history saving in JS mode)
 - **API endpoints** (/api/files, form actions)
 - **Storage architecture** (KV vs cookies, size limits, fallback logic)
-- Testing approach (72 tests, Vitest + Playwright)
+- Testing approach (83 tests, Vitest + Playwright)
 - Deployment process (Cloudflare Pages + KV setup)
 - File system operations (build-time file listing)
 - Security measures (sanitization, httpOnly cookies, CSRF protection)
