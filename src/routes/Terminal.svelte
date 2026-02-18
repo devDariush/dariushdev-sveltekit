@@ -4,6 +4,7 @@
 	import TerminalOutput from '$lib/components/TerminalOutput.svelte';
 	import TerminalInput from '$lib/components/TerminalInput.svelte';
 	import { executeCommand, config } from '$lib/commands-utils';
+	import { hasOnScreenKeyboard } from '$lib/device';
 	import type { HistoryEntry, Link } from '$lib/types/terminal';
 
 	interface Props {
@@ -32,8 +33,8 @@
 		// Apply theme to document
 		updateTheme();
 
-		// Focus input (skip on mobile to avoid keyboard popup)
-		if (!isMobile()) {
+		// Focus input (skip on devices with on-screen keyboards to avoid keyboard popup)
+		if (!hasOnScreenKeyboard()) {
 			inputElement?.focus();
 		}
 	});
@@ -110,10 +111,6 @@
 		}
 	}
 
-	function isMobile(): boolean {
-		return typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
-	}
-
 	function handleLinkClick(link: Link) {
 		if (link.type === 'command') {
 			input = link.target;
@@ -121,7 +118,7 @@
 		} else if (link.type === 'url') {
 			window.open(link.target, '_blank', 'noopener,noreferrer');
 		}
-		if (!isMobile()) {
+		if (!hasOnScreenKeyboard()) {
 			setTimeout(() => inputElement?.focus({ preventScroll: true }), 0);
 		}
 	}
@@ -135,7 +132,7 @@
 	}
 
 	function focusInput() {
-		if (!isMobile()) {
+		if (!hasOnScreenKeyboard()) {
 			inputElement?.focus({ preventScroll: true });
 		}
 	}

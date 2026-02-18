@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { hasOnScreenKeyboard } from '$lib/device';
+
 	interface Props {
 		value: string;
 		onSubmit: () => void;
@@ -29,12 +31,8 @@
 		}
 	}
 
-	function isMobile(): boolean {
-		return typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
-	}
-
 	function handleBlur(e: FocusEvent) {
-		if (isMobile()) return;
+		if (hasOnScreenKeyboard()) return;
 		const target = e.target as HTMLInputElement;
 		target?.focus({ preventScroll: true });
 	}
