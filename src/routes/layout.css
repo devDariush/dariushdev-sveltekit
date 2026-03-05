@@ -1,4 +1,9 @@
 @import 'tailwindcss';
+@import '../lib/assets/fonts/hack/hack.css';
+
+@theme {
+	--font-mono: 'Hack', 'Consolas', 'Monaco', 'Courier New', 'Courier', monospace;
+}
 
 @custom-variant dark (&:where(.dark, .dark *));
 
