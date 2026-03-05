@@ -117,7 +117,52 @@ Tests API endpoint for file listing:
 
 ### 6. terminal.test.ts (E2E)
 
-End-to-end tests for full terminal workflows using Playwright.
+End-to-end tests for full terminal workflows using Playwright:
+
+**Core Functionality**:
+
+- ✅ Terminal loading and greeting display
+- ✅ Command execution (ping, help, echo, clear)
+- ✅ Input focus management
+
+**File Operations**:
+
+- ✅ File listing (ls)
+- ✅ File reading (cat)
+- ✅ Usage errors and file not found
+- ✅ Markdown link rendering with security attributes
+
+**UI Features**:
+
+- ✅ Theme toggle (dark/light mode)
+- ✅ History persistence across reloads
+- ✅ Clear history persistence
+- ✅ Greeting link buttons remain clickable after overflow
+
+**Progressive Enhancement**:
+
+- ✅ No-JS functionality
+
+**ANSI Colors**:
+
+- ✅ Color command output with proper styling
+
+**Font Styling** (NEW):
+
+- ✅ Hack font with fallback stack
+- ✅ Font loading verification
+- ✅ Graceful fallback when fonts blocked
+
+**Error Handling**:
+
+- ✅ Unknown command errors
+- ✅ Empty command handling
+
+**Edge cases covered:**
+
+- Font blocking (privacy browsers like Tor)
+- Content overflow edge cases
+- Form-based no-JS submissions
 
 ## Coverage Analysis
 

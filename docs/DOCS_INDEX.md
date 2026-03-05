@@ -161,7 +161,8 @@ npm run build        # Build for production
 - ✅ ANSI color support (16 colors)
 - ✅ Image rendering via `cat` (HEAD-only fetch, inline `<img>` output)
 - ✅ Full SEO: title, description, Open Graph, Twitter Card, JSON-LD, sitemap
-- ✅ 83 comprehensive tests
+- ✅ Custom Hack monospace font with fallbacks for privacy browsers
+- ✅ 86 comprehensive tests (64 unit + 22 E2E)
 - ✅ TypeScript strict mode
 - ✅ Accessible (WCAG compliant)
 
@@ -194,7 +195,8 @@ npm run build        # Build for production
 - **Persist action** (async history saving in JS mode)
 - **API endpoints** (/api/files, form actions)
 - **Storage architecture** (KV vs cookies, size limits, fallback logic)
-- Testing approach (83 tests, Vitest + Playwright)
+- Testing approach (86 tests: 64 unit + 22 E2E, Vitest + Playwright)
+- Font styling (Hack font with system fallbacks for privacy browsers)
 - Deployment process (Cloudflare Pages + KV setup)
 - File system operations (build-time file listing)
 - Security measures (sanitization, httpOnly cookies, CSRF protection)

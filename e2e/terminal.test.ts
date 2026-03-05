@@ -269,6 +269,89 @@ test.describe('Terminal E2E Tests', () => {
 		});
 	});
 
+	test.describe('Font Styling', () => {
+		test('should use Hack font with fallbacks for terminal', async ({ page }) => {
+			await page.goto('/');
+			await page.waitForLoadState('networkidle');
+
+			// Check input element has correct font family
+			const input = page.locator('input[type="text"]').first();
+			const inputFont = await input.evaluate((el) =>
+				window.getComputedStyle(el).getPropertyValue('font-family')
+			);
+
+			// Font family should include Hack as the primary font
+			expect(inputFont).toContain('Hack');
+
+			// Check fallback fonts are present
+			expect(inputFont).toContain('Consolas');
+			expect(inputFont).toContain('Monaco');
+			expect(inputFont).toContain('monospace');
+		});
+
+		test('should load Hack font files', async ({ page }) => {
+			await page.goto('/');
+			await page.waitForLoadState('networkidle');
+
+			// Wait for fonts to be loaded using the Font Loading API
+			const fontsLoaded = await page.evaluate(async () => {
+				// Wait for fonts to load
+				await document.fonts.ready;
+
+				// Check if Hack font is available
+				const hackFontLoaded = document.fonts.check('16px Hack');
+				return hackFontLoaded;
+			});
+
+			// Hack font should be loaded
+			expect(fontsLoaded).toBeTruthy();
+
+			// Verify the font is actually being used
+			const input = page.locator('input[type="text"]').first();
+			const computedFont = await input.evaluate((el) => {
+				return window.getComputedStyle(el).getPropertyValue('font-family');
+			});
+
+			expect(computedFont).toContain('Hack');
+		});
+
+		test('should gracefully fallback when custom fonts blocked', async ({ browser }) => {
+			// Create context that blocks font loading
+			const context = await browser.newContext({
+				permissions: []
+			});
+			const page = await context.newPage();
+
+			// Block all font file requests
+			await page.route('**/*.{woff,woff2}', (route) => route.abort());
+
+			await page.goto('/');
+			await page.waitForLoadState('networkidle');
+
+			// Terminal should still be visible and functional
+			await expect(page.getByText("Type 'help' for commands")).toBeVisible();
+
+			const input = page.locator('input[type="text"]').first();
+			await input.fill('ping');
+			await input.press('Enter');
+			await expect(page.getByText('pong')).toBeVisible();
+
+			// Font family should still have fallbacks
+			const inputFont = await input.evaluate((el) =>
+				window.getComputedStyle(el).getPropertyValue('font-family')
+			);
+
+			// Should use fallback fonts (Consolas, Monaco, or monospace)
+			const hasFallback =
+				inputFont.includes('Consolas') ||
+				inputFont.includes('Monaco') ||
+				inputFont.includes('monospace');
+			expect(hasFallback).toBeTruthy();
+
+			await context.close();
+		});
+	});
+
 	test.describe('Input Focus', () => {
 		test('should auto-focus input after command execution', async ({ page }) => {
 			await page.goto('/');
