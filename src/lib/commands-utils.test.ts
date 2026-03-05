@@ -65,7 +65,6 @@ describe('commands-utils', () => {
 		it('should handle neofetch command', async () => {
 			const result = await executeCommand('neofetch', []);
 			expect(result.output).toContain('Dariush');
-			expect(result.output).toContain('HHU');
 			expect(result.links).toBeDefined();
 			expect(Array.isArray(result.links)).toBe(true);
 			expect(result.isGreeting).toBe(true);
@@ -143,11 +142,11 @@ describe('commands-utils', () => {
 			describe('image rendering', () => {
 				it('should render a .png as an <img> tag with isHtml', async () => {
 					const mockFetch = vi.fn().mockResolvedValue({ ok: true });
-					const result = await executeCommand('cat', ['profile.png'], { fetch: mockFetch });
+					const result = await executeCommand('cat', ['profile.webp'], { fetch: mockFetch });
 					expect(result.isHtml).toBe(true);
 					expect(result.output).toContain('<img');
-					expect(result.output).toContain('src="/profile.png"');
-					expect(result.output).toContain('alt="profile.png"');
+					expect(result.output).toContain('src="/profile.webp"');
+					expect(result.output).toContain('alt="profile.webp"');
 				});
 
 				it('should use a HEAD request for image existence check', async () => {

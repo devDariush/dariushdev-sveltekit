@@ -2,7 +2,7 @@
 
 ## Connect
 
-- [LinkedIn](https://www.linkedin.com/in/dariush-komeili-a44796232)
+- [LinkedIn](https://www.linkedin.com/in/devdariush/)
 - [Bluesky](https://bsky.app/profile/dariush.dev)
 - [Mastodon](https://fosstodon.org/@camey)
 - [GitHub](https://github.com/devDariush)

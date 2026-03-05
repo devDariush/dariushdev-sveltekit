@@ -5,13 +5,13 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href="/profile.png" type="image/png" />
+	<link rel="icon" href="/profile.webp" type="image/png" />
 
 	<!-- Primary -->
 	<title>Dariush Komeili – Computer Science Student</title>
 	<meta
 		name="description"
-		content="Computer Science Student at HHU. Based in Düsseldorf. Interested in XR. Monero fanatic. Privacy-conscious."
+		content="Software Developer. Based in Düsseldorf. Interested in XR. Monero fanatic. Privacy-conscious."
 	/>
 	<meta
 		name="keywords"
@@ -24,9 +24,9 @@
 	<meta property="og:title" content="Dariush Komeili – Computer Science Student" />
 	<meta
 		property="og:description"
-		content="Computer Science Student at HHU. Based in Düsseldorf. Interested in XR. Monero fanatic. Privacy-conscious."
+		content="Software Developer. Based in Düsseldorf. Interested in XR. Monero fanatic. Privacy-conscious."
 	/>
-	<meta property="og:image" content="https://dariush.dev/profile.png" />
+	<meta property="og:image" content="https://dariush.dev/profile.webp" />
 	<meta property="og:url" content="https://dariush.dev" />
 	<meta property="og:type" content="website" />
 	<meta property="og:locale" content="en_US" />
@@ -37,8 +37,8 @@
 	<meta name="twitter:title" content="Dariush Komeili – Computer Science Student" />
 	<meta
 		name="twitter:description"
-		content="Computer Science Student at HHU. Based in Düsseldorf. Interested in XR. Monero fanatic. Privacy-conscious."
+		content="Software Developer. Based in Düsseldorf. Interested in XR. Monero fanatic. Privacy-conscious."
 	/>
-	<meta name="twitter:image" content="https://dariush.dev/profile.png" />
+	<meta name="twitter:image" content="https://dariush.dev/profile.webp" />
 </svelte:head>
 {@render children()}

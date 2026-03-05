@@ -339,7 +339,7 @@ export const GET: RequestHandler = async () => {
 **Response Format**:
 
 ```json
-["about.md", "contact.md", "docs.md", "profile.png", "social.md"]
+["about.md", "contact.md", "docs.md", "profile.webp", "social.md"]
 ```
 
 **Characteristics**:

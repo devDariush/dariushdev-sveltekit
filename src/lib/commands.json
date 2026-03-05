@@ -1,5 +1,5 @@
 {
-	"greeting": "\n     _           _           _     \n  __| | __ _ _ __(_)_   _ ___| |__  \n / _` |/ _` | '__| | | | / __| '_ \\ \n| (_| | (_| | |  | | |_| \\__ \\ | | |\n \\__,_|\\__,_|_|  |_|\\__,_|___/_| |_|\n\n  Dariush Komeili\n  CS Student @ HHU · Düsseldorf 🇩🇪\n\n  Type 'help' for commands",
+	"greeting": "\n     _           _           _     \n  __| | __ _ _ __(_)_   _ ___| |__  \n / _` |/ _` | '__| | | | / __| '_ \\ \n| (_| | (_| | |  | | |_| \\__ \\ | | |\n \\__,_|\\__,_|_|  |_|\\__,_|___/_| |_|\n\n  Dariush Komeili\n  Software Developer 🇩🇪\n\n  Type 'help' for commands",
 	"greetingLinks": [
 		{
 			"text": "about",
