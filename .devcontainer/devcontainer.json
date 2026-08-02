@@ -1,0 +1,23 @@
+{
+  "name": "Node SvelteKit Dev Container",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu26.04",
+  "features": {
+    "ghcr.io/devcontainers/features/node:2": {
+      "version": "24"
+    }
+  },
+  "forwardPorts": [
+    8787
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "denoland.vscode-deno"
+      ],
+      "settings": {
+        "deno.enable": true,
+        "deno.lint": true
+      }
+    }
+  }
+}
