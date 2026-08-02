@@ -51,5 +51,9 @@
 	},
 	"dependencies": {
 		"marked": "^17.0.2"
+	},
+	"allowScripts": {
+		"esbuild@0.28.1": true,
+		"workerd@1.20260730.1": true
 	}
 }
