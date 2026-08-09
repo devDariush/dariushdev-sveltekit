@@ -12,7 +12,7 @@
 
 ## Email
 
-- dkomeili(@)proton.me — [PGP Key: EC05 0792 D47C C705](https://dariush.dev/keychain/dkomeili(a)proton.me/publickey.dkomeili@proton.me-860f37fc1be388567c72c6b5ec050792d47cc705.asc)
+- hi@dariush.dev — [PGP Key: F60A 29B1 F36C 5004](https://dariush.dev/public.asc)
 
 ## NEW: Book a meeting
 
