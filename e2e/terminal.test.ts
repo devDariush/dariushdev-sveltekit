@@ -134,16 +134,17 @@ test.describe('Terminal E2E Tests', () => {
 			// Wait for markdown content to appear
 			await expect(page.getByRole('heading', { name: 'About' })).toBeVisible();
 
+			// Currently commented out because there are no links anymore.
 			// All links in the rendered markdown output should open in a new tab
-			const renderedLinks = page.locator('.markdown-content a');
-			const count = await renderedLinks.count();
-			expect(count).toBeGreaterThan(0);
+			// const renderedLinks = page.locator('.markdown-content a');
+			// const count = await renderedLinks.count();
+			// expect(count).toBeGreaterThan(0);
 
-			for (let i = 0; i < count; i++) {
-				const link = renderedLinks.nth(i);
-				await expect(link).toHaveAttribute('target', '_blank');
-				await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
-			}
+			// for (let i = 0; i < count; i++) {
+			// 	const link = renderedLinks.nth(i);
+			// 	await expect(link).toHaveAttribute('target', '_blank');
+			// 	await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+			// }
 		});
 	});
 
