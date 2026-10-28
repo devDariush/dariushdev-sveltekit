@@ -4,6 +4,12 @@
 
 Comprehensive test suite covering all core terminal functionality. Run `npm run test:unit` to see current test count and status.
 
+## Migration regression coverage
+
+- `src/lib/terminal-html.test.ts` checks safe rendering of persisted HTML and Markdown: scripts, event handlers, unsafe URLs, external form destinations and arbitrary styles are removed while safe links, images and command forms remain usable. Social links (including Monero wallet links) and image output also have browser regression coverage.
+- E2E tests submit an actual `cat about.md` form with JavaScript disabled and verify history on a subsequent GET.
+- E2E tests run the production build in local Wrangler/workerd, so native `cloudflare:workers` bindings and KV behavior are tested in the same runtime used in production.
+
 ## Test Files
 
 ### 1. ansi-colors.test.ts

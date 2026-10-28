@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import TerminalHeader from '$lib/components/TerminalHeader.svelte';
-	import TerminalOutput from '$lib/components/TerminalOutput.svelte';
-	import TerminalInput from '$lib/components/TerminalInput.svelte';
-	import { executeCommand, config } from '$lib/commands-utils';
-	import { hasOnScreenKeyboard } from '$lib/device';
-	import type { HistoryEntry, Link } from '$lib/types/terminal';
+	import TerminalHeader from '#lib/components/TerminalHeader.svelte';
+	import TerminalOutput from '#lib/components/TerminalOutput.svelte';
+	import TerminalInput from '#lib/components/TerminalInput.svelte';
+	import { executeCommand, config } from '#lib/commands-utils.ts';
+	import { hasOnScreenKeyboard } from '#lib/device.ts';
+	import type { HistoryEntry, Link } from '#lib/types/terminal.ts';
 
 	interface Props {
 		initialHistory?: HistoryEntry[];

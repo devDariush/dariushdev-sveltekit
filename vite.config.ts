@@ -1,3 +1,4 @@
+import adapter from '@sveltejs/adapter-cloudflare';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vitest/config';
 import { playwright } from '@vitest/browser-playwright';
@@ -43,7 +44,7 @@ function staticFilesPlugin(): Plugin {
 }
 
 export default defineConfig({
-	plugins: [tailwindcss(), staticFilesPlugin(), sveltekit()],
+	plugins: [tailwindcss(), staticFilesPlugin(), sveltekit({ adapter: adapter() })],
 	test: {
 		expect: { requireAssertions: true },
 		projects: [

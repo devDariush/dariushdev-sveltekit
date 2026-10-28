@@ -21,7 +21,7 @@ By participating in this project, you agree to maintain a respectful and inclusi
 
 ### Prerequisites
 
-- Node.js 18+ and npm
+- Node.js 24 LTS and npm (see `.node-version`)
 - Git
 - A code editor (VS Code recommended)
 
@@ -243,10 +243,10 @@ When adding a new command:
 
    ```json
    {
-   	"newcmd": {
-   		"description": "What it does",
-   		"response": "dynamic"
-   	}
+     "newcmd": {
+       "description": "What it does",
+       "response": "dynamic"
+     }
    }
    ```
 

@@ -1,5 +1,5 @@
-import terminalConfig from '$lib/commands.json';
-import type { TerminalConfig, Link } from '$lib/types/terminal';
+import terminalConfig from '#lib/commands.json';
+import type { TerminalConfig, Link } from '#lib/types/terminal.ts';
 import { staticFiles } from 'virtual:static-files';
 
 const config = terminalConfig as TerminalConfig;

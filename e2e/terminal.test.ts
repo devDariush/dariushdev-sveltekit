@@ -148,6 +148,36 @@ test.describe('Terminal E2E Tests', () => {
 		});
 	});
 
+	test('should retain social links after Markdown sanitization', async ({ page }) => {
+		await page.goto('/');
+		await page.waitForLoadState('networkidle');
+		const input = page.locator('input[type="text"]').first();
+		await input.fill('cat social.md');
+		await input.press('Enter');
+		await expect(page.getByRole('link', { name: 'Monero', exact: true })).toHaveAttribute(
+			'href',
+			'monero:monero@dariush.dev'
+		);
+		const github = page.getByRole('link', { name: 'GitHub', exact: true });
+		await expect(github).toHaveAttribute('href', 'https://github.com/devDariush');
+		await expect(github).toHaveAttribute('target', '_blank');
+		await expect(github).toHaveAttribute('rel', /noopener/);
+	});
+
+	test('should retain image output after sanitization', async ({ page }) => {
+		await page.goto('/');
+		await page.waitForLoadState('networkidle');
+		const input = page.locator('input[type="text"]').first();
+		await input.fill('cat profile.webp');
+		await input.press('Enter');
+		const image = page.getByRole('img', { name: 'profile.webp', exact: true });
+		await expect(image).toBeVisible();
+		await expect(image).toHaveAttribute('src', '/profile.webp');
+		await expect
+			.poll(() => image.evaluate((el) => (el as HTMLImageElement).naturalWidth))
+			.toBeGreaterThan(0);
+	});
+
 	test.describe('Theme Toggle', () => {
 		test('should toggle between dark and light mode', async ({ page }) => {
 			await page.goto('/');
@@ -225,6 +255,22 @@ test.describe('Terminal E2E Tests', () => {
 	});
 
 	test.describe('Progressive Enhancement (No JS)', () => {
+		test('should execute commands and restore history without JavaScript', async ({ browser }) => {
+			const context = await browser.newContext({ javaScriptEnabled: false });
+			try {
+				const page = await context.newPage();
+				await page.goto('/');
+				await page.locator('input[name="command"]').fill('cat about.md');
+				await page.getByRole('button', { name: 'Run', exact: true }).click();
+				await expect(page.getByRole('heading', { name: 'About', exact: true })).toBeVisible();
+				// Start a new GET; reloading the POST response would resubmit the command.
+				await page.goto('/');
+				await expect(page.getByRole('heading', { name: 'About', exact: true })).toBeVisible();
+			} finally {
+				await context.close();
+			}
+		});
+
 		test('should work without JavaScript', async ({ browser }) => {
 			// Create new context with JS disabled
 			const context = await browser.newContext({ javaScriptEnabled: false });
@@ -240,13 +286,6 @@ test.describe('Terminal E2E Tests', () => {
 
 			await context.close();
 		});
-
-		// Note: Form submission without JS uses SvelteKit's SSR fallback branch which
-		// is only rendered in true server-side scenarios (e.g., curl, search engines).
-		// Playwright's JS disabling still renders the client bundle initially, so this
-		// test scenario doesn't accurately reflect the SSR-only path. The SSR fallback
-		// with <noscript> submit button is implemented in +page.svelte but can't be
-		// tested with Playwright's javaScriptEnabled: false approach.
 	});
 
 	test.describe('ANSI Colors', () => {
@@ -368,6 +407,28 @@ test.describe('Terminal E2E Tests', () => {
 			// Input should still be focused
 			await expect(input).toBeFocused();
 		});
+	});
+
+	test('should sanitize HTML restored from persisted history', async ({ page }) => {
+		await page.goto('/');
+		const response = await page.request.post('/?/persist', {
+			headers: { Origin: 'http://localhost:4173' },
+			form: {
+				history: JSON.stringify([
+					{
+						type: 'output',
+						content:
+							'<h2>Safe markup</h2><img src="/missing-image.png" onerror="document.documentElement.dataset.injected=1"><script>document.documentElement.dataset.injected=1</script>',
+						isHtml: true
+					}
+				])
+			}
+		});
+		expect(response.ok()).toBe(true);
+		await page.reload();
+		await expect(page.getByRole('heading', { name: 'Safe markup' })).toBeVisible();
+		expect(await page.evaluate(() => document.documentElement.dataset.injected)).toBeUndefined();
+		await expect(page.locator('img[onerror]')).toHaveCount(0);
 	});
 
 	test.describe('Error Handling', () => {

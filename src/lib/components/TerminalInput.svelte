@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { hasOnScreenKeyboard } from '$lib/device';
+	import { hasOnScreenKeyboard } from '#lib/device.ts';
 
 	interface Props {
 		value: string;

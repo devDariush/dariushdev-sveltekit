@@ -2,6 +2,12 @@
 
 Deep dive into the technical architecture and implementation details of the Terminal Interface.
 
+## SvelteKit 3 runtime
+
+The Cloudflare adapter is configured in `vite.config.ts`. Server actions import `env` from `cloudflare:workers`; KV history and the `ASSETS` fetch binding are declared in `src/app.d.ts`. Shared imports use `#lib` with explicit file extensions. TypeScript extends `$app/tsconfig`.
+
+`TerminalOutput.svelte` sanitizes rendered Markdown and persisted HTML through `src/lib/terminal-html.ts` before insertion. The sanitizer strips scripts, event handlers, unsafe URLs and arbitrary image styles while preserving Markdown, images and local command forms. Unit tests exercise the sanitizer in the edge runtime; E2E tests also cover actual form submission and history restoration with JavaScript disabled.
+
 ## Table of Contents
 
 - [Virtual Static Files Plugin](#virtual-static-files-plugin)
@@ -42,9 +48,7 @@ function staticFilesPlugin(): Plugin {
         const files = entries
           .filter(
             (entry) =>
-              entry.isFile() &&
-              !entry.name.startsWith('.') &&
-              !HIDDEN_FILES.has(entry.name)
+              entry.isFile() && !entry.name.startsWith('.') && !HIDDEN_FILES.has(entry.name)
           )
           .map((entry) => entry.name)
           .sort();
@@ -83,7 +87,7 @@ case 'ls': {
 import { staticFiles } from 'virtual:static-files';
 
 export const GET: RequestHandler = async () => {
-  return json(staticFiles);
+  return Response.json(staticFiles);
 };
 ```
 
@@ -111,10 +115,10 @@ The terminal uses a **dual storage strategy** that automatically selects the bes
 
 ### Cloudflare KV (Production)
 
-**When Available**: `platform?.env?.TERMINAL_KV` exists
+**When Available**: `env.TERMINAL_KV` exists
 
 ```typescript
-await platform.env.TERMINAL_KV.put(
+await env.TERMINAL_KV.put(
   `history:${sessionId}`,
   JSON.stringify(history),
   { expirationTtl: 60 * 60 * 24 * 7 } // 7 days
@@ -186,9 +190,9 @@ The cookie fallback has **three layers of protection** against size errors:
 cookies.set('session-id', sessionId, {
   path: '/',
   maxAge: 60 * 60 * 24 * 365, // 1 year
-  httpOnly: true,              // Not accessible via JavaScript
+  httpOnly: true, // Not accessible via JavaScript
   secure: process.env.NODE_ENV === 'production', // HTTPS only in prod
-  sameSite: 'lax'              // CSRF protection
+  sameSite: 'lax' // CSRF protection
 });
 ```
 
@@ -197,7 +201,7 @@ cookies.set('session-id', sessionId, {
 ```
 Request arrives
     ↓
-Check if platform.env.TERMINAL_KV exists
+Check if env.TERMINAL_KV exists
     ↓
     ├─ YES → Use KV storage (100 entry limit)
     │         └─ Save with 7-day TTL
@@ -240,7 +244,7 @@ async function saveHistory(historyToSave: HistoryEntry[]) {
 **In +page.server.ts** (server-side):
 
 ```typescript
-persist: async ({ request, cookies, platform }) => {
+persist: async ({ request, cookies }) => {
   const sessionId = getOrCreateSessionId(cookies);
   const data = await request.formData();
   const historyJson = data.get('history')?.toString();
@@ -248,12 +252,10 @@ persist: async ({ request, cookies, platform }) => {
   const history = JSON.parse(historyJson);
 
   // Save to KV or cookies (with fallback logic)
-  if (platform?.env?.TERMINAL_KV) {
-    await platform.env.TERMINAL_KV.put(
-      `history:${sessionId}`,
-      JSON.stringify(history),
-      { expirationTtl: 60 * 60 * 24 * 7 }
-    );
+  if (env.TERMINAL_KV) {
+    await env.TERMINAL_KV.put(`history:${sessionId}`, JSON.stringify(history), {
+      expirationTtl: 60 * 60 * 24 * 7
+    });
   } else {
     // Cookie fallback with size handling
     try {
@@ -271,7 +273,7 @@ persist: async ({ request, cookies, platform }) => {
   }
 
   return { success: true };
-}
+};
 ```
 
 ### When It's Called
@@ -330,7 +332,7 @@ import type { RequestHandler } from './$types';
 import { staticFiles } from 'virtual:static-files';
 
 export const GET: RequestHandler = async () => {
-  return json(staticFiles);
+  return Response.json(staticFiles);
 };
 ```
 
@@ -396,7 +398,7 @@ export const GET: RequestHandler = async () => {
 
 ```typescript
 {
-  history: string  // JSON-stringified HistoryEntry[]
+  history: string; // JSON-stringified HistoryEntry[]
 }
 ```
 
@@ -404,7 +406,7 @@ export const GET: RequestHandler = async () => {
 
 ```typescript
 {
-  success: boolean
+  success: boolean;
 }
 ```
 
@@ -426,13 +428,13 @@ The app detects JavaScript availability using Svelte's `browser` constant:
 
 ```svelte
 {#if browser}
-	<!-- Client-side rich terminal -->
-	<Terminal initialHistory={data.history} initialDarkMode={data.darkMode} />
+  <!-- Client-side rich terminal -->
+  <Terminal initialHistory={data.history} initialDarkMode={data.darkMode} />
 {:else}
-	<!-- SSR fallback -->
-	<div class="terminal-fallback">
-		<!-- Form-based terminal -->
-	</div>
+  <!-- SSR fallback -->
+  <div class="terminal-fallback">
+    <!-- Form-based terminal -->
+  </div>
 {/if}
 ```
 

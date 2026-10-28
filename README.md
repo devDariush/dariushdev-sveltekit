@@ -1,6 +1,6 @@
 # Terminal Interface
 
-A fully-featured terminal interface built with **SvelteKit 5**, featuring progressive enhancement, Cloudflare KV storage, markdown rendering, and comprehensive test coverage.
+A fully-featured terminal interface built with **SvelteKit 3 and Svelte 5**, featuring progressive enhancement, Cloudflare KV storage, markdown rendering, and comprehensive test coverage.
 
 🌐 **Live Demo**: [https://dariush.dev](https://dariush.dev)
 
@@ -19,6 +19,8 @@ A fully-featured terminal interface built with **SvelteKit 5**, featuring progre
 - ♿ **Accessible** - WCAG compliant with keyboard navigation
 
 ## 🚀 Quick Start
+
+Use Node.js 24 LTS (see `.node-version`). Project configuration lives in `vite.config.ts`; shared imports use the `#lib` alias declared in `package.json`.
 
 ```sh
 # Install dependencies
@@ -73,7 +75,11 @@ npm run build
 
 ```sh
 # Run unit tests
-npm run test:unit
+npm run test:unit -- --run
+
+# Type checking and linting
+npm run check
+npm run lint
 
 # Run e2e tests
 npm run test:e2e
@@ -86,7 +92,7 @@ npm test
 
 ## 📦 Deployment
 
-### Cloudflare Pages
+### Cloudflare Workers
 
 See [docs/CLOUDFLARE_DEPLOYMENT.md](docs/CLOUDFLARE_DEPLOYMENT.md) for complete deployment instructions.
 
@@ -104,10 +110,10 @@ npm run preview
 
 ## 🛠️ Tech Stack
 
-- **Framework**: SvelteKit 5 with Runes
+- **Framework**: SvelteKit 3 with Svelte 5 Runes
 - **Styling**: Tailwind CSS v4
 - **Storage**: Cloudflare KV
-- **Markdown**: marked
-- **Testing**: Vitest + Playwright
-- **Deployment**: Cloudflare Pages
-- **Language**: TypeScript (strict mode)
+- **Markdown**: marked 18, with sanitized HTML output
+- **Testing**: Vitest 5 + Playwright
+- **Deployment**: Cloudflare Workers behind Caddy (deSEC DNS)
+- **Language**: TypeScript 6 (strict mode)

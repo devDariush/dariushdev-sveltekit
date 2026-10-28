@@ -4,7 +4,7 @@ import { GET } from './+server';
 describe('/api/files endpoint', () => {
 	it('should return list of files', async () => {
 		const response = await GET({} as never);
-		const data = await response.json();
+		const data = (await response.json()) as string[];
 
 		expect(response.status).toBe(200);
 		expect(Array.isArray(data)).toBe(true);
@@ -13,7 +13,7 @@ describe('/api/files endpoint', () => {
 
 	it('should include known static files', async () => {
 		const response = await GET({} as never);
-		const data = await response.json();
+		const data = (await response.json()) as string[];
 
 		expect(data).toContain('about.md');
 		expect(data).toContain('contact.md');
@@ -22,7 +22,7 @@ describe('/api/files endpoint', () => {
 
 	it('should not include hidden files', async () => {
 		const response = await GET({} as never);
-		const data = await response.json();
+		const data = (await response.json()) as string[];
 
 		for (const file of data) {
 			expect(file.startsWith('.')).toBe(false);
@@ -31,7 +31,7 @@ describe('/api/files endpoint', () => {
 
 	it('should return files sorted alphabetically', async () => {
 		const response = await GET({} as never);
-		const data = await response.json();
+		const data = (await response.json()) as string[];
 
 		const sorted = [...data].sort();
 		expect(data).toEqual(sorted);
@@ -44,7 +44,7 @@ describe('/api/files endpoint', () => {
 
 	it('should return only string entries', async () => {
 		const response = await GET({} as never);
-		const data = await response.json();
+		const data = (await response.json()) as string[];
 
 		for (const item of data) {
 			expect(typeof item).toBe('string');
@@ -53,7 +53,7 @@ describe('/api/files endpoint', () => {
 
 	it('should not include directories', async () => {
 		const response = await GET({} as never);
-		const data = await response.json();
+		const data = (await response.json()) as string[];
 
 		// All entries should have file extensions (no bare directory names)
 		for (const item of data) {
@@ -73,7 +73,7 @@ describe('/api/files endpoint', () => {
 
 	it('should include markdown files', async () => {
 		const response = await GET({} as never);
-		const data = await response.json();
+		const data = (await response.json()) as string[];
 
 		const mdFiles = data.filter((f: string) => f.endsWith('.md'));
 		expect(mdFiles.length).toBeGreaterThan(0);

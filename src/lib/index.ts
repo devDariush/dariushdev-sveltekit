@@ -1,1 +1,1 @@
-// place files you want to import through the `$lib` alias in this folder.
+// Shared modules are imported through the #lib package import alias.

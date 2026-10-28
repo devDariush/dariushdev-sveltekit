@@ -1,18 +1,9 @@
-// See https://svelte.dev/docs/kit/types#app.d.ts
-// for information about these interfaces
+// Cloudflare bindings used by the SvelteKit server routes.
 declare global {
-	namespace App {
-		// interface Error {}
-		// interface Locals {}
-		// interface PageData {}
-		// interface PageState {}
-		interface Platform {
-			env?: {
-				TERMINAL_KV?: KVNamespace;
-				ASSETS?: Fetcher;
-			};
-			context?: ExecutionContext;
-			caches?: CacheStorage;
+	namespace Cloudflare {
+		interface Env {
+			TERMINAL_KV?: KVNamespace;
+			ASSETS?: Fetcher;
 		}
 	}
 }

@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { browser } from '$app/environment';
+	import { browser } from '$app/env';
 	import type { PageData } from './$types';
 	import Terminal from './Terminal.svelte';
-	import TerminalHeader from '$lib/components/TerminalHeader.svelte';
-	import TerminalOutput from '$lib/components/TerminalOutput.svelte';
-	import type { Link } from '$lib/types/terminal';
+	import TerminalHeader from '#lib/components/TerminalHeader.svelte';
+	import TerminalOutput from '#lib/components/TerminalOutput.svelte';
+	import type { Link } from '#lib/types/terminal.ts';
 
 	let { data }: { data: PageData } = $props();
 

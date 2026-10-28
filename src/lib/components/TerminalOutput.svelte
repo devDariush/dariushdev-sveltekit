@@ -1,6 +1,7 @@
 <script lang="ts">
-	import type { HistoryEntry, Link } from '$lib/types/terminal';
-	import { parseAnsi, hasAnsiCodes } from '$lib/ansi-colors';
+	import type { HistoryEntry, Link } from '#lib/types/terminal.ts';
+	import { sanitizeTerminalHtml } from '#lib/terminal-html.ts';
+	import { parseAnsi, hasAnsiCodes } from '#lib/ansi-colors.ts';
 
 	interface Props {
 		history: HistoryEntry[];
@@ -28,7 +29,7 @@
 							<a
 								href={link.target}
 								target="_blank"
-								rel="noopener noreferrer"
+								rel="external noopener noreferrer"
 								class="rounded border border-blue-500/30 px-3 py-1 text-sm text-blue-600 transition-colors hover:bg-blue-500/10 dark:text-blue-400"
 							>
 								[ {link.text} ]
@@ -78,7 +79,8 @@
 							}
 						}}
 					>
-						{@html entry.content}
+						<!-- eslint-disable-next-line svelte/no-at-html-tags -- Executable markup and unsafe URLs are removed by the sanitizer. -->
+						{@html sanitizeTerminalHtml(entry.content)}
 					</div>
 				{:else if hasAnsiCodes(entry.content)}
 					<!-- Render with ANSI color codes -->
@@ -103,7 +105,7 @@
 								<a
 									href={link.target}
 									target="_blank"
-									rel="noopener noreferrer"
+									rel="external noopener noreferrer"
 									class="block text-left text-blue-600 underline transition-colors hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
 								>
 									→ {link.text}

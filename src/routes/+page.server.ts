@@ -1,7 +1,8 @@
-import type { HistoryEntry } from '$lib/types/terminal';
+import { env } from 'cloudflare:workers';
+import type { HistoryEntry } from '#lib/types/terminal.ts';
 import type { Actions, PageServerLoad } from './$types';
-import { getOrCreateSessionId } from '$lib/server/session';
-import { executeCommand, config } from '$lib/commands-utils';
+import { getOrCreateSessionId } from '#lib/server/session.ts';
+import { executeCommand, config } from '#lib/commands-utils.ts';
 
 const MAX_HISTORY = 100;
 
@@ -11,16 +12,16 @@ const GREETING_ENTRY: HistoryEntry = {
 	links: config.greetingLinks
 };
 
-export const load: PageServerLoad = async ({ cookies, platform }) => {
+export const load: PageServerLoad = async ({ cookies }) => {
 	const sessionId = getOrCreateSessionId(cookies);
 	const darkModeCookie = cookies.get('dark-mode');
 
 	let history: HistoryEntry[] = [GREETING_ENTRY];
 
 	// Try to load from KV if available (Cloudflare), otherwise use cookies for local dev
-	if (platform?.env?.TERMINAL_KV) {
+	if (env.TERMINAL_KV) {
 		try {
-			const savedHistory = await platform.env.TERMINAL_KV.get(`history:${sessionId}`, 'json');
+			const savedHistory = await env.TERMINAL_KV.get(`history:${sessionId}`, 'json');
 			if (savedHistory && Array.isArray(savedHistory)) {
 				history = [GREETING_ENTRY, ...savedHistory];
 			}
@@ -48,13 +49,13 @@ export const load: PageServerLoad = async ({ cookies, platform }) => {
 };
 
 export const actions = {
-	execute: async ({ request, cookies, platform, fetch: eventFetch }) => {
+	execute: async ({ request, cookies, fetch: eventFetch }) => {
 		const sessionId = getOrCreateSessionId(cookies);
 
 		// Create a fetch function for reading static assets
 		// On Cloudflare: use ASSETS binding (works in Workers/NoJS)
 		// Locally: use SvelteKit's event.fetch
-		const assets = platform?.env?.ASSETS;
+		const assets = env.ASSETS;
 		const assetFetch = assets
 			? (url: string) => assets.fetch(new URL(url, request.url))
 			: (url: string) => eventFetch(url);
@@ -65,9 +66,9 @@ export const actions = {
 		let history: HistoryEntry[] = [];
 
 		// Load history from KV or cookies
-		if (platform?.env?.TERMINAL_KV) {
+		if (env.TERMINAL_KV) {
 			try {
-				const savedHistory = await platform.env.TERMINAL_KV.get(`history:${sessionId}`, 'json');
+				const savedHistory = await env.TERMINAL_KV.get(`history:${sessionId}`, 'json');
 				if (savedHistory && Array.isArray(savedHistory)) {
 					history = savedHistory;
 				}
@@ -125,9 +126,9 @@ export const actions = {
 				}
 
 				// Save to KV or cookies
-				if (platform?.env?.TERMINAL_KV) {
+				if (env.TERMINAL_KV) {
 					try {
-						await platform.env.TERMINAL_KV.put(
+						await env.TERMINAL_KV.put(
 							`history:${sessionId}`,
 							JSON.stringify(history),
 							{ expirationTtl: 60 * 60 * 24 * 7 } // 7 days
@@ -189,9 +190,9 @@ export const actions = {
 		}
 
 		// Save to KV or cookies
-		if (platform?.env?.TERMINAL_KV) {
+		if (env.TERMINAL_KV) {
 			try {
-				await platform.env.TERMINAL_KV.put(
+				await env.TERMINAL_KV.put(
 					`history:${sessionId}`,
 					JSON.stringify(history),
 					{ expirationTtl: 60 * 60 * 24 * 7 } // 7 days
@@ -218,7 +219,7 @@ export const actions = {
 
 		return { success: true };
 	},
-	persist: async ({ request, cookies, platform }) => {
+	persist: async ({ request, cookies }) => {
 		const sessionId = getOrCreateSessionId(cookies);
 		const data = await request.formData();
 		const historyJson = data.get('history')?.toString();
@@ -231,9 +232,9 @@ export const actions = {
 			const history = JSON.parse(historyJson);
 
 			// Save to KV or cookies
-			if (platform?.env?.TERMINAL_KV) {
+			if (env.TERMINAL_KV) {
 				try {
-					await platform.env.TERMINAL_KV.put(
+					await env.TERMINAL_KV.put(
 						`history:${sessionId}`,
 						JSON.stringify(history),
 						{ expirationTtl: 60 * 60 * 24 * 7 } // 7 days
