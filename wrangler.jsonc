@@ -18,16 +18,9 @@
 	"observability": {
 		"enabled": true
 	},
-	"routes": [
-		{
-			"pattern": "dariush.dev",
-			"custom_domain": true
-		},
-		{
-			"pattern": "www.dariush.dev",
-			"custom_domain": true
-		}
-	],
+	// The public domains terminate TLS at Caddy; proxy traffic uses workers.dev.
+	"workers_dev": true,
+	"routes": [],
 	"kv_namespaces": [
 		{
 			"binding": "TERMINAL_KV",
